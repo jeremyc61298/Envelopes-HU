@@ -13,6 +13,9 @@
 		3F67F88D22612BCF002F05B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F67F88C22612BCF002F05B1 /* Assets.xcassets */; };
 		3F67F89022612BCF002F05B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F67F88E22612BCF002F05B1 /* LaunchScreen.storyboard */; };
 		3F67F89B22612BD0002F05B1 /* Envelopes_HUUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F67F89A22612BD0002F05B1 /* Envelopes_HUUITests.swift */; };
+		3F67F8A622613345002F05B1 /* EnvelopeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F67F8A522613345002F05B1 /* EnvelopeTableViewController.swift */; };
+		3F67F8A8226133D8002F05B1 /* Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F67F8A7226133D8002F05B1 /* Envelope.swift */; };
+		3F67F8AA22613C63002F05B1 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F67F8A922613C63002F05B1 /* Transaction.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +39,9 @@
 		3F67F89622612BD0002F05B1 /* Envelopes-HUUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Envelopes-HUUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F67F89A22612BD0002F05B1 /* Envelopes_HUUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Envelopes_HUUITests.swift; sourceTree = "<group>"; };
 		3F67F89C22612BD0002F05B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3F67F8A522613345002F05B1 /* EnvelopeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopeTableViewController.swift; sourceTree = "<group>"; };
+		3F67F8A7226133D8002F05B1 /* Envelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Envelope.swift; sourceTree = "<group>"; };
+		3F67F8A922613C63002F05B1 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +85,9 @@
 			children = (
 				3F67F88522612BCE002F05B1 /* AppDelegate.swift */,
 				3F67F88722612BCE002F05B1 /* ViewController.swift */,
+				3F67F8A522613345002F05B1 /* EnvelopeTableViewController.swift */,
+				3F67F8A7226133D8002F05B1 /* Envelope.swift */,
+				3F67F8A922613C63002F05B1 /* Transaction.swift */,
 				3F67F88922612BCE002F05B1 /* Main.storyboard */,
 				3F67F88C22612BCF002F05B1 /* Assets.xcassets */,
 				3F67F88E22612BCF002F05B1 /* LaunchScreen.storyboard */,
@@ -198,7 +207,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F67F88822612BCE002F05B1 /* ViewController.swift in Sources */,
+				3F67F8A622613345002F05B1 /* EnvelopeTableViewController.swift in Sources */,
 				3F67F88622612BCE002F05B1 /* AppDelegate.swift in Sources */,
+				3F67F8A8226133D8002F05B1 /* Envelope.swift in Sources */,
+				3F67F8AA22613C63002F05B1 /* Transaction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
