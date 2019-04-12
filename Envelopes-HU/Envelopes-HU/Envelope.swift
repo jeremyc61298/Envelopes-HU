@@ -18,8 +18,4 @@ class Envelope {
         self.title = title
         self.totalAmount = total
     }
-    
-    func addTransaction(trans: Transaction) {
-        transactions.append(trans)
-    }
 }
