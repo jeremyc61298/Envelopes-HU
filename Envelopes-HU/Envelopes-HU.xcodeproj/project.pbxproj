@@ -9,12 +9,13 @@
 /* Begin PBXBuildFile section */
 		3F05E78B22652113009C4654 /* Envelopes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F05E78922652113009C4654 /* Envelopes.xcdatamodeld */; };
 		3F67F88622612BCE002F05B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F67F88522612BCE002F05B1 /* AppDelegate.swift */; };
-		3F67F88822612BCE002F05B1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F67F88722612BCE002F05B1 /* ViewController.swift */; };
 		3F67F88B22612BCE002F05B1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F67F88922612BCE002F05B1 /* Main.storyboard */; };
 		3F67F88D22612BCF002F05B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F67F88C22612BCF002F05B1 /* Assets.xcassets */; };
 		3F67F89022612BCF002F05B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F67F88E22612BCF002F05B1 /* LaunchScreen.storyboard */; };
 		3F67F89B22612BD0002F05B1 /* Envelopes_HUUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F67F89A22612BD0002F05B1 /* Envelopes_HUUITests.swift */; };
-		3F67F8A622613345002F05B1 /* EnvelopeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F67F8A522613345002F05B1 /* EnvelopeTableViewController.swift */; };
+		3F9E266B226A6CA8002A5B6B /* EnvelopeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E266A226A6CA8002A5B6B /* EnvelopeTableViewController.swift */; };
+		3F9E266D226A6FA6002A5B6B /* EnvelopeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E266C226A6FA6002A5B6B /* EnvelopeViewController.swift */; };
+		3F9E266F226A6FEB002A5B6B /* CreateCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E266E226A6FEB002A5B6B /* CreateCategoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +32,6 @@
 		3F05E78A22652113009C4654 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		3F67F88222612BCE002F05B1 /* Envelopes-HU.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Envelopes-HU.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F67F88522612BCE002F05B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3F67F88722612BCE002F05B1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3F67F88A22612BCE002F05B1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3F67F88C22612BCF002F05B1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F67F88F22612BCF002F05B1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -39,7 +39,9 @@
 		3F67F89622612BD0002F05B1 /* Envelopes-HUUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Envelopes-HUUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F67F89A22612BD0002F05B1 /* Envelopes_HUUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Envelopes_HUUITests.swift; sourceTree = "<group>"; };
 		3F67F89C22612BD0002F05B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3F67F8A522613345002F05B1 /* EnvelopeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopeTableViewController.swift; sourceTree = "<group>"; };
+		3F9E266A226A6CA8002A5B6B /* EnvelopeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnvelopeTableViewController.swift; sourceTree = "<group>"; };
+		3F9E266C226A6FA6002A5B6B /* EnvelopeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopeViewController.swift; sourceTree = "<group>"; };
+		3F9E266E226A6FEB002A5B6B /* CreateCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCategoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,9 +85,10 @@
 			children = (
 				3F67F88522612BCE002F05B1 /* AppDelegate.swift */,
 				3F05E78922652113009C4654 /* Envelopes.xcdatamodeld */,
-				3F67F88722612BCE002F05B1 /* ViewController.swift */,
-				3F67F8A522613345002F05B1 /* EnvelopeTableViewController.swift */,
+				3F9E266A226A6CA8002A5B6B /* EnvelopeTableViewController.swift */,
+				3F9E266E226A6FEB002A5B6B /* CreateCategoryViewController.swift */,
 				3F67F88922612BCE002F05B1 /* Main.storyboard */,
+				3F9E266C226A6FA6002A5B6B /* EnvelopeViewController.swift */,
 				3F67F88C22612BCF002F05B1 /* Assets.xcassets */,
 				3F67F88E22612BCF002F05B1 /* LaunchScreen.storyboard */,
 				3F67F89122612BCF002F05B1 /* Info.plist */,
@@ -203,10 +206,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F67F88822612BCE002F05B1 /* ViewController.swift in Sources */,
-				3F67F8A622613345002F05B1 /* EnvelopeTableViewController.swift in Sources */,
+				3F9E266D226A6FA6002A5B6B /* EnvelopeViewController.swift in Sources */,
 				3F67F88622612BCE002F05B1 /* AppDelegate.swift in Sources */,
+				3F9E266F226A6FEB002A5B6B /* CreateCategoryViewController.swift in Sources */,
 				3F05E78B22652113009C4654 /* Envelopes.xcdatamodeld in Sources */,
+				3F9E266B226A6CA8002A5B6B /* EnvelopeTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

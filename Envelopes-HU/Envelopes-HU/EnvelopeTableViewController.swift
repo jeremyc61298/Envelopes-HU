@@ -11,22 +11,6 @@ import CoreData
 
 class EnvelopeTableViewController: UITableViewController {
     
-    @IBAction func createNewAlert(_ sender: UIBarButtonItem) {
-        let createOption = UIAlertController(title: "Create New", message: nil, preferredStyle: .actionSheet)
-        
-        // TODO: Create a handle for both of these actions use it as the third argument
-        let createEnvelope = UIAlertAction(title: "Envelope", style: .default)
-        let createSection = UIAlertAction(title: "Category", style: .default)
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
-        
-        createOption.addAction(createEnvelope)
-        createOption.addAction(createSection)
-        createOption.addAction(cancel)
-        
-        // TODO: Possibly add some event to be called when the action is over
-        self.present(createOption, animated: true, completion: nil)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,31 +19,6 @@ class EnvelopeTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
-        
-        // Connect to the model in core data
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        let category = Category(context: context)
-        category.title = "First"
-
-        
-        do {
-            try context.save()
-        } catch {
-            print(error)
-        }
-        
-        let request: NSFetchRequest<Category> = Category.fetchRequest()
-        request.predicate = NSPredicate(format: "title == %@", "First")
-        do {
-            let matches = try context.fetch(request)
-            for match in matches {
-                print (match)
-            }
-        } catch {
-            print(error)
-        }
-        
     }
 
     // MARK: - Table view data source
@@ -74,15 +33,15 @@ class EnvelopeTableViewController: UITableViewController {
         return 0
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "envelopeCell", for: indexPath)
 
         // Configure the cell...
 
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -119,14 +78,30 @@ class EnvelopeTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "envelopeSegue" {
+            if let destination = segue.destination as? EnvelopeViewController{
+                // Get selected cell, its index, and header
+                let currentCell = sender as! UITableViewCell
+                let indexPath = self.tableView.indexPath(for: currentCell)!
+                let header = self.tableView.headerView(forSection: indexPath.section)
+                
+                // Populate the destination's values with the table cell's values
+                destination.selectedEnvelopeName = currentCell.textLabel!.text!
+                destination.selectedCategoryName = header?.textLabel!.text!
+            }
+        } else if segue.identifier == "newCategorySegue" {
+            if let destination = segue.destination as? CreateCategoryViewController {
+                // Possibly do something here to prepare for creating a new category
+            }
+        }
     }
-    */
+    
 
 }
