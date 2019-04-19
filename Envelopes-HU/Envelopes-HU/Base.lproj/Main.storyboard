@@ -57,7 +57,11 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Envelopes" largeTitleDisplayMode="always" id="7CB-tz-lCY">
-                        <barButtonItem key="rightBarButtonItem" title="New" id="8oW-qz-fq1"/>
+                        <barButtonItem key="rightBarButtonItem" title="New" id="8oW-qz-fq1">
+                            <connections>
+                                <action selector="createNewAlert:" destination="Jge-Qv-WQT" id="JvO-hQ-MFi"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>

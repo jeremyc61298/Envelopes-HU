@@ -7,9 +7,26 @@
 //
 
 import UIKit
+import CoreData
 
 class EnvelopeTableViewController: UITableViewController {
-
+    
+    @IBAction func createNewAlert(_ sender: UIBarButtonItem) {
+        let createOption = UIAlertController(title: "Create New", message: nil, preferredStyle: .actionSheet)
+        
+        // TODO: Create a handle for both of these actions use it as the third argument
+        let createEnvelope = UIAlertAction(title: "Envelope", style: .default)
+        let createSection = UIAlertAction(title: "Category", style: .default)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        createOption.addAction(createEnvelope)
+        createOption.addAction(createSection)
+        createOption.addAction(cancel)
+        
+        // TODO: Possibly add some event to be called when the action is over
+        self.present(createOption, animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -18,6 +35,31 @@ class EnvelopeTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
+        
+        // Connect to the model in core data
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        let category = Category(context: context)
+        category.title = "First"
+
+        
+        do {
+            try context.save()
+        } catch {
+            print(error)
+        }
+        
+        let request: NSFetchRequest<Category> = Category.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", "First")
+        do {
+            let matches = try context.fetch(request)
+            for match in matches {
+                print (match)
+            }
+        } catch {
+            print(error)
+        }
+        
     }
 
     // MARK: - Table view data source

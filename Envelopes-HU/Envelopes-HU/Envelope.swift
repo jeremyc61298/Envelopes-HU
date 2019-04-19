@@ -10,7 +10,7 @@ import Foundation
 
 class Envelope {
     var title: String
-    var description: String?
+    var about: String?
     var totalAmount: Double
     var transactions: [Transaction] = []
     
