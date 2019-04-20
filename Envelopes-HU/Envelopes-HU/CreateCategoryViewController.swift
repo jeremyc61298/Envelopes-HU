@@ -21,18 +21,21 @@ class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func cancelCreation(_ sender: UIBarButtonItem) {
+        // Go back to the main nav controller
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func createCategory(_ sender: UIBarButtonItem) {
         // Create a new category and place it in Core Data
         // Connect to the model in core data
-        if (categoryName.text != "") {
+        if (categoryName.text == "") {
+            showMessage(message: "Please enter a valid category name")
+        } else {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let context = appDelegate.persistentContainer.viewContext
             
             // First check to make sure that there aren't any categories with the new name
             let isUnique = checkForDuplicates(inContext: context)
-            
             if (!isUnique) {
                 showMessage(message: "There is already a category by that name")
             } else {
@@ -45,12 +48,11 @@ class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
                 } catch {
                     print(error)
                 }
+                
+                // Go back to the main controller
+                dismiss(animated: true, completion: nil)
             }
-        } else {
-            showMessage(message: "Please enter a valid category name")
         }
-        
-        // Now go back to the main screen
     }
 
     func checkForDuplicates(inContext context: NSManagedObjectContext) -> Bool {

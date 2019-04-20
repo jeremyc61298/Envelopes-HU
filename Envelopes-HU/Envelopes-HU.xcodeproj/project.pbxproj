@@ -16,6 +16,8 @@
 		3F9E266B226A6CA8002A5B6B /* EnvelopeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E266A226A6CA8002A5B6B /* EnvelopeTableViewController.swift */; };
 		3F9E266D226A6FA6002A5B6B /* EnvelopeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E266C226A6FA6002A5B6B /* EnvelopeViewController.swift */; };
 		3F9E266F226A6FEB002A5B6B /* CreateCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E266E226A6FEB002A5B6B /* CreateCategoryViewController.swift */; };
+		3F9E2671226B872E002A5B6B /* CategoryHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E2670226B872E002A5B6B /* CategoryHeaderCell.swift */; };
+		3F9E2673226B873B002A5B6B /* CategoryFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E2672226B873B002A5B6B /* CategoryFooterCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,8 @@
 		3F9E266A226A6CA8002A5B6B /* EnvelopeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnvelopeTableViewController.swift; sourceTree = "<group>"; };
 		3F9E266C226A6FA6002A5B6B /* EnvelopeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopeViewController.swift; sourceTree = "<group>"; };
 		3F9E266E226A6FEB002A5B6B /* CreateCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCategoryViewController.swift; sourceTree = "<group>"; };
+		3F9E2670226B872E002A5B6B /* CategoryHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHeaderCell.swift; sourceTree = "<group>"; };
+		3F9E2672226B873B002A5B6B /* CategoryFooterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFooterCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,8 @@
 				3F67F88522612BCE002F05B1 /* AppDelegate.swift */,
 				3F05E78922652113009C4654 /* Envelopes.xcdatamodeld */,
 				3F9E266A226A6CA8002A5B6B /* EnvelopeTableViewController.swift */,
+				3F9E2670226B872E002A5B6B /* CategoryHeaderCell.swift */,
+				3F9E2672226B873B002A5B6B /* CategoryFooterCell.swift */,
 				3F9E266E226A6FEB002A5B6B /* CreateCategoryViewController.swift */,
 				3F67F88922612BCE002F05B1 /* Main.storyboard */,
 				3F9E266C226A6FA6002A5B6B /* EnvelopeViewController.swift */,
@@ -206,6 +212,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F9E2671226B872E002A5B6B /* CategoryHeaderCell.swift in Sources */,
+				3F9E2673226B873B002A5B6B /* CategoryFooterCell.swift in Sources */,
 				3F9E266D226A6FA6002A5B6B /* EnvelopeViewController.swift in Sources */,
 				3F67F88622612BCE002F05B1 /* AppDelegate.swift in Sources */,
 				3F9E266F226A6FEB002A5B6B /* CreateCategoryViewController.swift in Sources */,

@@ -18,8 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="51" translatesAutoresizingMaskIntoConstraints="NO" id="dbX-LS-bXA">
-                                <rect key="frame" x="16" y="242" width="343" height="182.5"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="23" translatesAutoresizingMaskIntoConstraints="NO" id="Llx-af-QSO">
+                                <rect key="frame" x="16" y="80" width="343" height="73.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter a name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fYb-YD-cRx">
                                         <rect key="frame" x="121.5" y="0.0" width="100.5" height="20.5"/>
@@ -28,28 +28,23 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ggd-u9-IBU">
-                                        <rect key="frame" x="20" y="71.5" width="303" height="30"/>
+                                        <rect key="frame" x="20" y="43.5" width="303" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Beb-o6-C5N">
-                                        <rect key="frame" x="148.5" y="152.5" width="46" height="30"/>
-                                        <state key="normal" title="Create"/>
-                                    </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="ggd-u9-IBU" secondAttribute="trailing" constant="20" symbolic="YES" id="3gE-pg-w3V"/>
-                                    <constraint firstItem="ggd-u9-IBU" firstAttribute="leading" secondItem="dbX-LS-bXA" secondAttribute="leading" constant="20" symbolic="YES" id="I0j-FE-DyS"/>
+                                    <constraint firstItem="ggd-u9-IBU" firstAttribute="leading" secondItem="Llx-af-QSO" secondAttribute="leading" constant="20" symbolic="YES" id="TEB-nC-DrM"/>
+                                    <constraint firstAttribute="trailing" secondItem="ggd-u9-IBU" secondAttribute="trailing" constant="20" symbolic="YES" id="vYi-cS-jce"/>
                                 </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="dbX-LS-bXA" firstAttribute="leading" secondItem="XG5-bw-ck1" secondAttribute="leading" constant="16" id="0BW-co-Eh4"/>
-                            <constraint firstItem="XG5-bw-ck1" firstAttribute="bottom" secondItem="dbX-LS-bXA" secondAttribute="bottom" constant="242.5" id="5Tx-e7-3LA"/>
-                            <constraint firstItem="XG5-bw-ck1" firstAttribute="trailing" secondItem="dbX-LS-bXA" secondAttribute="trailing" constant="16" id="UW3-6E-2hY"/>
-                            <constraint firstItem="dbX-LS-bXA" firstAttribute="top" secondItem="XG5-bw-ck1" secondAttribute="top" constant="178" id="oGh-9A-Lcw"/>
+                            <constraint firstItem="Llx-af-QSO" firstAttribute="leading" secondItem="XG5-bw-ck1" secondAttribute="leading" constant="16" id="5t0-XX-cG6"/>
+                            <constraint firstItem="Llx-af-QSO" firstAttribute="top" secondItem="XG5-bw-ck1" secondAttribute="top" constant="16" id="XYT-Ac-pmc"/>
+                            <constraint firstItem="XG5-bw-ck1" firstAttribute="trailing" secondItem="Llx-af-QSO" secondAttribute="trailing" constant="16" id="q1a-vg-lpX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="XG5-bw-ck1"/>
                     </view>
