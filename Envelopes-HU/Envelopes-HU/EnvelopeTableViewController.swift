@@ -56,6 +56,9 @@ class EnvelopeTableViewController: UITableViewController {
         // Get ManagedObjectContext
         self.context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
+        // Set the header height here till I can find another place to set the height
+        self.tableView.sectionHeaderHeight = 50
+        
         // Perform fetch on fetchRequestController
         fetchEnvelopesToController()
         fetchCategoriesToController()
@@ -118,17 +121,30 @@ class EnvelopeTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        if let sections = categoriesFetchedResultsController.fetchedObjects {
+//            let currentSection = sections[section]
+//            return currentSection.title
+//        }
+//        return nil
+//    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // Custom header cell can go here, with section title and also an AddEnvelope button
+        let headerCell = tableView.dequeueReusableCell(withIdentifier: "categoryHeaderCell") as! CategoryHeaderCell
+        
+        // Populate category name
         if let sections = categoriesFetchedResultsController.fetchedObjects {
             let currentSection = sections[section]
-            return currentSection.title
+            headerCell.categoryName.text = currentSection.title
         }
-        return nil
+
+        return headerCell
     }
     
-//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        // Custom header cell can go here, with section title and also an AddEnvelope button
-//    }
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50.0
+    }
     
 //    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView {
 //        // Custom footer cell goes here, with the ability to delete the section entirely
