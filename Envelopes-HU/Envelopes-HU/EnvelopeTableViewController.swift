@@ -121,14 +121,6 @@ class EnvelopeTableViewController: UITableViewController {
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        if let sections = categoriesFetchedResultsController.fetchedObjects {
-//            let currentSection = sections[section]
-//            return currentSection.title
-//        }
-//        return nil
-//    }
-    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // Custom header cell can go here, with section title and also an AddEnvelope button
         let headerCell = tableView.dequeueReusableCell(withIdentifier: "categoryHeaderCell") as! CategoryHeaderCell
@@ -146,9 +138,10 @@ class EnvelopeTableViewController: UITableViewController {
         return 50.0
     }
     
-//    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView {
-//        // Custom footer cell goes here, with the ability to delete the section entirely
-//    }
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView {
+        // Custom footer cell goes here, with the ability to delete the section entirely
+        return UIView()
+    }
     
 
     /*
@@ -204,12 +197,17 @@ class EnvelopeTableViewController: UITableViewController {
                 destination.selectedEnvelopeName = currentCell.textLabel!.text!
                 destination.selectedCategoryName = header?.textLabel!.text!
             }
-        } else if segue.identifier == "newCategorySegue" {
-//            if let destination = segue.destination as? CreateCategoryViewController {
-//                // Possibly do something here to prepare for creating a new category
-//            }
         }
     }
-    
+}
 
+extension EnvelopeTableViewController: CategoryFooterCellDelegate {
+    func categoryFooterCell(_ categoryFooterCell: CategoryFooterCell) {
+        if let index = self.tableView.indexPath(for: categoryFooterCell) {
+            // Get the name of the category that the footerCell was in
+            if let categoryName = (tableView.headerView(forSection: index.section) as? CategoryHeaderCell)?.categoryName {
+                // TODO: This always fails
+            }
+        }
+    }
 }

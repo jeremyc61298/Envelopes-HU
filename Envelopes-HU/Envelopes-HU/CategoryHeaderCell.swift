@@ -13,6 +13,8 @@ class CategoryHeaderCell: UITableViewCell {
     // Need the title of the category and a button to add an envelope in that category
     @IBOutlet weak var categoryName: UILabel!
     
+    // Delegate
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -24,6 +26,4 @@ class CategoryHeaderCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    // TODO: Add a delegate protocol for moving to the create envelope page
-
 }

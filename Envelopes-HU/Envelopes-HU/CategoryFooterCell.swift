@@ -10,6 +10,15 @@ import UIKit
 
 class CategoryFooterCell: UITableViewCell {
 
+    var delegate: CategoryFooterCellDelegate?
+    
+    @IBAction func deleteCategory(_ sender: UIButton) {
+        // Notify delegate that the delete button has been pressed
+        if let d = delegate {
+            d.categoryFooterCell(self)
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -21,4 +30,8 @@ class CategoryFooterCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+}
+
+protocol CategoryFooterCellDelegate {
+    func categoryFooterCell(_ categoryFooterCell: CategoryFooterCell)
 }

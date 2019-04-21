@@ -141,7 +141,11 @@
                         <viewLayoutGuide key="safeArea" id="S6Q-on-Rws"/>
                     </view>
                     <navigationItem key="navigationItem" title="New Envelope" largeTitleDisplayMode="never" id="nQd-jk-2dm">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="28e-5j-IGe"/>
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="28e-5j-IGe">
+                            <connections>
+                                <action selector="cancelCreation:" destination="RV7-hY-jdg" id="jbZ-Go-XQ6"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Create" id="Ya9-VS-l2E"/>
                     </navigationItem>
                     <connections>
@@ -193,8 +197,7 @@
                                             <rect key="frame" x="305" y="7" width="62" height="30"/>
                                             <state key="normal" title="Add Item"/>
                                             <connections>
-                                                <action selector="createNewEnvelope:" destination="BH7-hy-wo6" eventType="touchUpInside" id="2F5-gz-uTD"/>
-                                                <segue destination="UMh-om-KzS" kind="presentation" identifier="newEnvelopeSegue" id="e2g-C1-C9S"/>
+                                                <segue destination="UMh-om-KzS" kind="presentation" identifier="newEnvelopeSegue" id="lwI-0R-qPY"/>
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mhu-2F-4nq">
@@ -247,7 +250,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoryFooterCell" id="hSP-Hx-eT1">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoryFooterCell" id="hSP-Hx-eT1" customClass="CategoryFooterCell" customModule="Envelopes_HU" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="143.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hSP-Hx-eT1" id="Q7d-Nf-eGr">
@@ -257,6 +260,9 @@
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vB-v5-t8W">
                                             <rect key="frame" x="20" y="7" width="335" height="30"/>
                                             <state key="normal" title="Delete Category"/>
+                                            <connections>
+                                                <action selector="deleteCategory:" destination="hSP-Hx-eT1" eventType="touchUpInside" id="EbX-51-VQc"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>

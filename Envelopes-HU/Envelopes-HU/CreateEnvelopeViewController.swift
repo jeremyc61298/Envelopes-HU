@@ -22,6 +22,10 @@ class CreateEnvelopeViewController: UIViewController, UITextFieldDelegate {
         envelopeAmount.delegate = self
     }
     
+    @IBAction func cancelCreation(_ sender: UIBarButtonItem) {
+        // Go back to the main nav controller
+        dismiss(animated: true, completion: nil)
+    }
     
     // UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
