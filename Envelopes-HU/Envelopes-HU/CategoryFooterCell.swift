@@ -11,6 +11,8 @@ import UIKit
 class CategoryFooterCell: UITableViewCell {
 
     var delegate: CategoryFooterCellDelegate?
+    var categoryName: String!
+    var sectionNumber: Int!
     
     @IBAction func deleteCategory(_ sender: UIButton) {
         // Notify delegate that the delete button has been pressed

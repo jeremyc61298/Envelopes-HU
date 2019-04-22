@@ -140,7 +140,10 @@ class EnvelopeTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView {
         // Custom footer cell goes here, with the ability to delete the section entirely
-        return UIView()
+        let footerCell = tableView.dequeueReusableCell(withIdentifier: "categoryFooterCell") as! CategoryFooterCell
+        footerCell.delegate = self
+        footerCell.categoryName = categoriesFetchedResultsController.fetchedObjects?[section].title
+        return footerCell
     }
     
 
@@ -201,12 +204,36 @@ class EnvelopeTableViewController: UITableViewController {
     }
 }
 
+// TODO: This is not working. Sometimes finds nil when unwrapping the section number
+// Sometimes doesn't seem to fire at all
 extension EnvelopeTableViewController: CategoryFooterCellDelegate {
     func categoryFooterCell(_ categoryFooterCell: CategoryFooterCell) {
-        if let index = self.tableView.indexPath(for: categoryFooterCell) {
-            // Get the name of the category that the footerCell was in
-            if let categoryName = (tableView.headerView(forSection: index.section) as? CategoryHeaderCell)?.categoryName {
-                // TODO: This always fails
+        let categoryNameToDelete = categoryFooterCell.categoryName!
+        let sectionNumber = categoryFooterCell.sectionNumber!
+        // Check if the user really wants to delete the category with an action sheet
+        let requestToDelete = UIAlertController(title: nil,
+                                              message: "Delete \(categoryNameToDelete)",
+                                              preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Delete",
+                                         style: .destructive,
+                                         handler: {(action) in self.deleteCategory(sectionNumber)})
+        let cancelAction = UIAlertAction(title: "Cancel",
+                                         style: .cancel)
+        requestToDelete.addAction(deleteAction)
+        requestToDelete.addAction(cancelAction)
+        self.present(requestToDelete, animated: true, completion: nil)
+    }
+    
+    func deleteCategory(_ sectionNumber: Int) {
+        // Get category
+        if let categoryToDelete = categoriesFetchedResultsController.fetchedObjects?[sectionNumber] {
+            self.context.delete(categoryToDelete)
+            do {
+                try context.save()
+            } catch {
+                let saveError = error as NSError
+                print("Could not delete category")
+                print("\(saveError), \(saveError.localizedDescription)")
             }
         }
     }

@@ -2,7 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.98" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Category" representedClassName="Category" syncable="YES" codeGenerationType="class">
         <attribute name="title" attributeType="String" syncable="YES"/>
-        <relationship name="envelopes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Envelope" inverseName="category" inverseEntity="Envelope" syncable="YES"/>
+        <relationship name="envelopes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Envelope" inverseName="category" inverseEntity="Envelope" syncable="YES"/>
     </entity>
     <entity name="Envelope" representedClassName="Envelope" syncable="YES" codeGenerationType="class">
         <attribute name="about" optional="YES" attributeType="String" syncable="YES"/>
