@@ -12,37 +12,40 @@ import CoreData
 class EnvelopeTableViewController: UITableViewController {
     
     // ManagedObjectContext for this application
-    var context: NSManagedObjectContext!
+//    var context: NSManagedObjectContext!
+//
+//    // FecthedResultsController for Envelope entity
+//    fileprivate lazy var envelopesFetchedResultsController: NSFetchedResultsController<Envelope> = {
+//        // Get all the Envelopes from CoreData
+//        let request: NSFetchRequest<Envelope> = Envelope.fetchRequest()
+//
+//        // Must use a sort descriptor here
+//        let sortTitle = NSSortDescriptor(key: "title", ascending: true)
+//        request.sortDescriptors = [sortTitle]
+//
+//        // Create fetchResultsController
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.context, sectionNameKeyPath: "category.title", cacheName: nil)
+//
+//        return frc
+//    }()
+//
+//    // FetchResultsController for Category entity
+//    fileprivate lazy var categoriesFetchedResultsController: NSFetchedResultsController<Category> = {
+//        // Get all the Categories from CoreData
+//        let request: NSFetchRequest<Category> = Category.fetchRequest()
+//
+//        // Sort by something here
+//        let sortTitle = NSSortDescriptor(key: "title", ascending: true)
+//        request.sortDescriptors = [sortTitle]
+//
+//        // Create Controller
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.context, sectionNameKeyPath: nil, cacheName: nil)
+//
+//        return frc
+//    }()
     
-    // FecthedResultsController for Envelope entity
-    fileprivate lazy var envelopesFetchedResultsController: NSFetchedResultsController<Envelope> = {
-        // Get all the Envelopes from CoreData
-        let request: NSFetchRequest<Envelope> = Envelope.fetchRequest()
-        
-        // Must use a sort descriptor here
-        let sortTitle = NSSortDescriptor(key: "title", ascending: true)
-        request.sortDescriptors = [sortTitle]
-        
-        // Create fetchResultsController
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.context, sectionNameKeyPath: "category.title", cacheName: nil)
-        
-        return frc
-    }()
-    
-    // FetchResultsController for Category entity
-    fileprivate lazy var categoriesFetchedResultsController: NSFetchedResultsController<Category> = {
-        // Get all the Categories from CoreData
-        let request: NSFetchRequest<Category> = Category.fetchRequest()
-        
-        // Sort by something here
-        let sortTitle = NSSortDescriptor(key: "title", ascending: true)
-        request.sortDescriptors = [sortTitle]
-        
-        // Create Controller
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.context, sectionNameKeyPath: nil, cacheName: nil)
-        
-        return frc
-    }()
+    // Instantiate the CoreDataManager
+    let cdm = CoreDataManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,56 +54,55 @@ class EnvelopeTableViewController: UITableViewController {
         self.navigationItem.leftBarButtonItem = self.editButtonItem
         
         // Get ManagedObjectContext
-        self.context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
-        // Set the header height here till I can find another place to set the height
-        //self.tableView.sectionHeaderHeight = 50
+        //self.context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         //deleteAllCategories(inContext: context)
         
         // Perform fetch on fetchRequestController
-        fetchEnvelopesToController()
-        fetchCategoriesToController()
+//        fetchEnvelopesToController()
+//        fetchCategoriesToController()
+        
+        // Initialize all the fetchedResultsControllers in CoreDataManager
+        cdm.fetchAll()
     }
     
     func reloadViewAndData() {
-        fetchCategoriesToController()
-        fetchEnvelopesToController()
+        cdm.fetchAll()
         self.tableView.reloadData()
     }
     
-    fileprivate func fetchEnvelopesToController() {
-        do {
-            try envelopesFetchedResultsController.performFetch()
-        } catch {
-            let fetchError = error as NSError
-            print("Could not retrieve envelopes")
-            print ("\(fetchError), \(fetchError.localizedDescription)")
-        }
-    }
-
-    fileprivate func fetchCategoriesToController() {
-        do {
-            try categoriesFetchedResultsController.performFetch()
-        } catch {
-            let fetchError = error as NSError
-            print("Could not retrieve categories")
-            print ("\(fetchError), \(fetchError.localizedDescription)")
-        }
-    }
+//    fileprivate func fetchEnvelopesToController() {
+//        do {
+//            try envelopesFetchedResultsController.performFetch()
+//        } catch {
+//            let fetchError = error as NSError
+//            print("Could not retrieve envelopes")
+//            print ("\(fetchError), \(fetchError.localizedDescription)")
+//        }
+//    }
+//
+//    fileprivate func fetchCategoriesToController() {
+//        do {
+//            try categoriesFetchedResultsController.performFetch()
+//        } catch {
+//            let fetchError = error as NSError
+//            print("Could not retrieve categories")
+//            print ("\(fetchError), \(fetchError.localizedDescription)")
+//        }
+//    }
     
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // TODO: Should this be numberOfObjects or sections.count?
-        if let categories = categoriesFetchedResultsController.fetchedObjects {
+        if let categories = cdm.categoriesFRC.fetchedObjects {
            return categories.count
         }
         return 0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sections = envelopesFetchedResultsController.sections {
+        if let sections = cdm.envelopesFRC.sections {
             if section < sections.count {
                 let currentSectionInfo = sections[section]
                 return currentSectionInfo.numberOfObjects
@@ -114,9 +116,9 @@ class EnvelopeTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "envelopeCell", for: indexPath)
         
         // Make sure that the envelope actually exists
-        if let numSectionsWithEnvelopes = envelopesFetchedResultsController.sections?.count {
+        if let numSectionsWithEnvelopes = cdm.envelopesFRC.sections?.count {
             if (numSectionsWithEnvelopes < indexPath.section) {
-                let envelope = envelopesFetchedResultsController.object(at: indexPath)
+                let envelope = cdm.envelopesFRC.object(at: indexPath)
                 
                 // Configure the cell...
                 cell.textLabel?.text = envelope.title
@@ -131,15 +133,14 @@ class EnvelopeTableViewController: UITableViewController {
         let headerCell = tableView.dequeueReusableCell(withIdentifier: "categoryHeaderCell") as! CategoryHeaderCell
         
         // Populate category name
-        if let sections = categoriesFetchedResultsController.fetchedObjects {
+        if let sections = cdm.categoriesFRC.fetchedObjects {
             let currentSection = sections[section]
             headerCell.categoryName.text = currentSection.title
         }
 
         return headerCell
     }
-    
-    // This function is not being called
+
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50.0
     }
@@ -148,7 +149,7 @@ class EnvelopeTableViewController: UITableViewController {
         // Custom footer cell goes here, with the ability to delete the section entirely
         let footerCell = tableView.dequeueReusableCell(withIdentifier: "categoryFooterCell") as! CategoryFooterCell
         footerCell.delegate = self
-        footerCell.categoryName = categoriesFetchedResultsController.fetchedObjects?[section].title
+        footerCell.categoryName = cdm.categoriesFRC.fetchedObjects?[section].title
         footerCell.sectionNumber = section
         return footerCell
     }
@@ -226,19 +227,20 @@ class EnvelopeTableViewController: UITableViewController {
     }
 }
 
-// TODO: This is not working. Sometimes finds nil when unwrapping the section number
-// Sometimes doesn't seem to fire at all
+// CategoryFooterCellDelegate
+// Handler called when the user wants to delete a category
 extension EnvelopeTableViewController: CategoryFooterCellDelegate {
     func categoryFooterCell(_ categoryFooterCell: CategoryFooterCell) {
         let categoryNameToDelete = categoryFooterCell.categoryName!
         let sectionNumber = categoryFooterCell.sectionNumber!
+        
         // Check if the user really wants to delete the category with an action sheet
         let requestToDelete = UIAlertController(title: nil,
                                               message: "Delete \(categoryNameToDelete)",
                                               preferredStyle: .actionSheet)
         let deleteAction = UIAlertAction(title: "Delete",
                                          style: .destructive,
-                                         handler: {(action) in self.deleteCategory(sectionNumber)})
+                                         handler: {(action) in self.cdm.deleteCategory(self, sectionNumber)})
         let cancelAction = UIAlertAction(title: "Cancel",
                                          style: .cancel)
         requestToDelete.addAction(deleteAction)
@@ -246,22 +248,26 @@ extension EnvelopeTableViewController: CategoryFooterCellDelegate {
         self.present(requestToDelete, animated: true, completion: nil)
     }
     
-    func deleteCategory(_ sectionNumber: Int) {
-        // Get category
-        if let categoryToDelete = categoriesFetchedResultsController.fetchedObjects?[sectionNumber] {
-            self.context.delete(categoryToDelete)
-            do {
-                try context.save()
-                self.reloadViewAndData()
-            } catch {
-                let saveError = error as NSError
-                print("Could not delete category")
-                print("\(saveError), \(saveError.localizedDescription)")
-            }
-        }
-    }
+//    func deleteCategory(_ sectionNumber: Int) {
+//        // Get category
+//        if let categoryToDelete = categoriesFetchedResultsController.fetchedObjects?[sectionNumber] {
+//            self.context.delete(categoryToDelete)
+//            do {
+//                try context.save()
+//                self.reloadViewAndData()
+//            } catch {
+//                let saveError = error as NSError
+//                print("Could not delete category")
+//                print("\(saveError), \(saveError.localizedDescription)")
+//            }
+//        }
+//    }
 }
 
+// Reloads the table data and core data when a view controller
+// that was presented modally is dismissed. This is needed because
+// the underlying table view does not disappear when a modal
+// segue occurs, so none of the view life cycle functions are triggered
 extension EnvelopeTableViewController: ModalViewDelegate {
     func modalDismissed() {
         // Update the model and reload the table
@@ -269,6 +275,7 @@ extension EnvelopeTableViewController: ModalViewDelegate {
     }
 }
 
+// Debugging function which deletes all categories from core data
 fileprivate func deleteAllCategories(inContext context: NSManagedObjectContext) {
     let deleteFetch: NSFetchRequest<NSFetchRequestResult> = Category.fetchRequest()
     let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
