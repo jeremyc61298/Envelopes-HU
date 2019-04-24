@@ -47,9 +47,6 @@ class EnvelopeTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
         
@@ -57,11 +54,19 @@ class EnvelopeTableViewController: UITableViewController {
         self.context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         // Set the header height here till I can find another place to set the height
-        self.tableView.sectionHeaderHeight = 50
+        //self.tableView.sectionHeaderHeight = 50
+        
+        //deleteAllCategories(inContext: context)
         
         // Perform fetch on fetchRequestController
         fetchEnvelopesToController()
         fetchCategoriesToController()
+    }
+    
+    func reloadViewAndData() {
+        fetchCategoriesToController()
+        fetchEnvelopesToController()
+        self.tableView.reloadData()
     }
     
     fileprivate func fetchEnvelopesToController() {
@@ -134,7 +139,8 @@ class EnvelopeTableViewController: UITableViewController {
         return headerCell
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    // This function is not being called
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50.0
     }
     
@@ -143,9 +149,13 @@ class EnvelopeTableViewController: UITableViewController {
         let footerCell = tableView.dequeueReusableCell(withIdentifier: "categoryFooterCell") as! CategoryFooterCell
         footerCell.delegate = self
         footerCell.categoryName = categoriesFetchedResultsController.fetchedObjects?[section].title
+        footerCell.sectionNumber = section
         return footerCell
     }
     
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 50.0
+    }
 
     /*
     // Override to support conditional editing of the table view.
@@ -200,6 +210,18 @@ class EnvelopeTableViewController: UITableViewController {
                 destination.selectedEnvelopeName = currentCell.textLabel!.text!
                 destination.selectedCategoryName = header?.textLabel!.text!
             }
+        } else if segue.identifier == "newCategorySegue" {
+            if let nav = segue.destination as? UINavigationController {
+                if let destination = nav.viewControllers.first as? CreateCategoryViewController {
+                    destination.delegate = self
+                }
+            }
+        } else if segue.identifier == "newEnvelopeSegue" {
+            if let nav = segue.destination as? UINavigationController {
+                if let destination = nav.viewControllers.first as? CreateEnvelopeViewController {
+                    destination.delegate = self
+                }
+            }
         }
     }
 }
@@ -230,11 +252,32 @@ extension EnvelopeTableViewController: CategoryFooterCellDelegate {
             self.context.delete(categoryToDelete)
             do {
                 try context.save()
+                self.reloadViewAndData()
             } catch {
                 let saveError = error as NSError
                 print("Could not delete category")
                 print("\(saveError), \(saveError.localizedDescription)")
             }
         }
+    }
+}
+
+extension EnvelopeTableViewController: ModalViewDelegate {
+    func modalDismissed() {
+        // Update the model and reload the table
+        self.reloadViewAndData()
+    }
+}
+
+fileprivate func deleteAllCategories(inContext context: NSManagedObjectContext) {
+    let deleteFetch: NSFetchRequest<NSFetchRequestResult> = Category.fetchRequest()
+    let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+    do {
+        try context.execute(deleteRequest)
+        try context.save()
+    } catch {
+        let deleteError = error as NSError
+        print ("Unable to delete")
+        print ("\(deleteError), \(deleteError.localizedDescription)")
     }
 }

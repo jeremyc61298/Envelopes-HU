@@ -12,6 +12,7 @@ import CoreData
 class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var categoryName: UITextField!
+    var delegate: ModalViewDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +23,11 @@ class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func cancelCreation(_ sender: UIBarButtonItem) {
         // Go back to the main nav controller
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            if self.delegate != nil {
+                self.delegate.modalDismissed()
+            }
+        }
     }
     
     @IBAction func createCategory(_ sender: UIBarButtonItem) {
@@ -50,7 +55,12 @@ class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
                 }
                 
                 // Go back to the main controller
-                dismiss(animated: true, completion: nil)
+                dismiss(animated: true) {
+                    // TODO: Maybe this should be called in viewWillDisappear?
+                    if self.delegate != nil {
+                        self.delegate.modalDismissed()
+                    }
+                }
             }
         }
     }

@@ -181,7 +181,7 @@
         <scene sceneID="bA7-XU-XSy">
             <objects>
                 <tableViewController id="nKF-wK-J1r" customClass="EnvelopeTableViewController" customModule="Envelopes_HU" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="O1u-1O-kfn">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="-1" id="O1u-1O-kfn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -194,14 +194,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X5h-2a-SeQ">
-                                            <rect key="frame" x="305" y="7" width="62" height="30"/>
+                                            <rect key="frame" x="297" y="7" width="62" height="30"/>
                                             <state key="normal" title="Add Item"/>
                                             <connections>
                                                 <segue destination="UMh-om-KzS" kind="presentation" identifier="newEnvelopeSegue" id="lwI-0R-qPY"/>
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mhu-2F-4nq">
-                                            <rect key="frame" x="16" y="11" width="71" height="21"/>
+                                            <rect key="frame" x="16" y="11" width="70.5" height="21"/>
                                             <attributedString key="attributedText">
                                                 <fragment content="Category">
                                                     <attributes>
@@ -213,9 +213,10 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="Mhu-2F-4nq" firstAttribute="leading" secondItem="UGf-qB-m1R" secondAttribute="leading" constant="16" id="F1i-rU-m04"/>
+                                        <constraint firstItem="Mhu-2F-4nq" firstAttribute="leading" secondItem="UGf-qB-m1R" secondAttribute="leading" constant="16" id="8XL-tb-VkC"/>
                                         <constraint firstAttribute="bottom" secondItem="X5h-2a-SeQ" secondAttribute="bottom" constant="6.5" id="F5K-45-dVu"/>
-                                        <constraint firstAttribute="trailing" secondItem="X5h-2a-SeQ" secondAttribute="trailing" constant="8" id="YH7-tw-SOA"/>
+                                        <constraint firstAttribute="trailing" secondItem="X5h-2a-SeQ" secondAttribute="trailing" constant="16" id="YH7-tw-SOA"/>
+                                        <constraint firstItem="X5h-2a-SeQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Mhu-2F-4nq" secondAttribute="trailing" constant="8" symbolic="YES" id="kZr-wN-Q9W"/>
                                         <constraint firstItem="X5h-2a-SeQ" firstAttribute="top" secondItem="UGf-qB-m1R" secondAttribute="top" constant="7" id="pZR-Jb-vIJ"/>
                                         <constraint firstAttribute="bottom" secondItem="Mhu-2F-4nq" secondAttribute="bottom" constant="11.5" id="ubV-LB-3p7"/>
                                         <constraint firstItem="Mhu-2F-4nq" firstAttribute="top" secondItem="UGf-qB-m1R" secondAttribute="top" constant="11" id="xdM-AU-j6o"/>
@@ -258,7 +259,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vB-v5-t8W">
-                                            <rect key="frame" x="20" y="7" width="335" height="30"/>
+                                            <rect key="frame" x="125" y="7" width="112" height="30"/>
                                             <state key="normal" title="Delete Category"/>
                                             <connections>
                                                 <action selector="deleteCategory:" destination="hSP-Hx-eT1" eventType="touchUpInside" id="EbX-51-VQc"/>
@@ -267,9 +268,9 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="7vB-v5-t8W" firstAttribute="top" secondItem="Q7d-Nf-eGr" secondAttribute="top" constant="7" id="Bt5-fy-LMw"/>
-                                        <constraint firstItem="7vB-v5-t8W" firstAttribute="leading" secondItem="Q7d-Nf-eGr" secondAttribute="leading" constant="20" symbolic="YES" id="heV-65-VBf"/>
+                                        <constraint firstItem="7vB-v5-t8W" firstAttribute="leading" secondItem="Q7d-Nf-eGr" secondAttribute="leading" constant="125" id="heV-65-VBf"/>
                                         <constraint firstAttribute="bottom" secondItem="7vB-v5-t8W" secondAttribute="bottom" constant="6.5" id="rJN-pf-geZ"/>
-                                        <constraint firstAttribute="trailing" secondItem="7vB-v5-t8W" secondAttribute="trailing" constant="20" symbolic="YES" id="sXS-1g-lJu"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="7vB-v5-t8W" secondAttribute="trailing" constant="125" id="sXS-1g-lJu"/>
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>

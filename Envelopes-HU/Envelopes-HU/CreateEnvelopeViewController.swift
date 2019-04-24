@@ -13,6 +13,7 @@ class CreateEnvelopeViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var envelopeName: UITextField!
     @IBOutlet weak var envelopeAmount: UITextField!
+    var delegate: ModalViewDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +25,13 @@ class CreateEnvelopeViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func cancelCreation(_ sender: UIBarButtonItem) {
         // Go back to the main nav controller
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) {
+            if self.delegate != nil {
+                self.delegate.modalDismissed()             
+            }
+        }
     }
-    
+
     // UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
