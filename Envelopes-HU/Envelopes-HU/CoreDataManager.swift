@@ -78,18 +78,29 @@ class CoreDataManager {
         }
     }
     
-    func deleteCategory(_ tbc: EnvelopeTableViewController, _ sectionNumber: Int) {
-        // Get category
-        if let categoryToDelete = categoriesFRC.fetchedObjects?[sectionNumber] {
-            self.context.delete(categoryToDelete)
-            do {
-                try context.save()
-                tbc.reloadViewAndData()
-            } catch {
-                let saveError = error as NSError
-                print("Could not delete category")
-                print("\(saveError), \(saveError.localizedDescription)")
-            }
+    func saveContext(errorMsg: String) -> Bool {
+        do {
+            try context.save()
+            return true
+        } catch {
+            let saveError = error as NSError
+            print(errorMsg)
+            print("\(saveError), \(saveError.localizedDescription)")
+            return false
+        }
+    }
+    
+    // Debugging function which deletes all categories from core data
+    fileprivate func deleteAllCategories(inContext context: NSManagedObjectContext) {
+        let deleteFetch: NSFetchRequest<NSFetchRequestResult> = Category.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+        do {
+            try context.execute(deleteRequest)
+            try context.save()
+        } catch {
+            let deleteError = error as NSError
+            print ("Unable to delete")
+            print ("\(deleteError), \(deleteError.localizedDescription)")
         }
     }
 }

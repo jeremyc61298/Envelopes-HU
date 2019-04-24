@@ -71,26 +71,6 @@ class EnvelopeTableViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-//    fileprivate func fetchEnvelopesToController() {
-//        do {
-//            try envelopesFetchedResultsController.performFetch()
-//        } catch {
-//            let fetchError = error as NSError
-//            print("Could not retrieve envelopes")
-//            print ("\(fetchError), \(fetchError.localizedDescription)")
-//        }
-//    }
-//
-//    fileprivate func fetchCategoriesToController() {
-//        do {
-//            try categoriesFetchedResultsController.performFetch()
-//        } catch {
-//            let fetchError = error as NSError
-//            print("Could not retrieve categories")
-//            print ("\(fetchError), \(fetchError.localizedDescription)")
-//        }
-//    }
-    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -240,7 +220,7 @@ extension EnvelopeTableViewController: CategoryFooterCellDelegate {
                                               preferredStyle: .actionSheet)
         let deleteAction = UIAlertAction(title: "Delete",
                                          style: .destructive,
-                                         handler: {(action) in self.cdm.deleteCategory(self, sectionNumber)})
+                                         handler: {(action) in self.deleteCategory(sectionNumber)})
         let cancelAction = UIAlertAction(title: "Cancel",
                                          style: .cancel)
         requestToDelete.addAction(deleteAction)
@@ -248,20 +228,17 @@ extension EnvelopeTableViewController: CategoryFooterCellDelegate {
         self.present(requestToDelete, animated: true, completion: nil)
     }
     
-//    func deleteCategory(_ sectionNumber: Int) {
-//        // Get category
-//        if let categoryToDelete = categoriesFetchedResultsController.fetchedObjects?[sectionNumber] {
-//            self.context.delete(categoryToDelete)
-//            do {
-//                try context.save()
-//                self.reloadViewAndData()
-//            } catch {
-//                let saveError = error as NSError
-//                print("Could not delete category")
-//                print("\(saveError), \(saveError.localizedDescription)")
-//            }
-//        }
-//    }
+    // Should this stay here?
+    func deleteCategory(_ sectionNumber: Int) {
+        // Get category
+        if let categoryToDelete = cdm.categoriesFRC.fetchedObjects?[sectionNumber] {
+            // This should be handled by the CoreDataManager
+            cdm.context.delete(categoryToDelete)
+            if (cdm.saveContext(errorMsg: "Could not delete category")) {
+                self.reloadViewAndData()
+            }
+        }
+    }
 }
 
 // Reloads the table data and core data when a view controller
@@ -272,19 +249,5 @@ extension EnvelopeTableViewController: ModalViewDelegate {
     func modalDismissed() {
         // Update the model and reload the table
         self.reloadViewAndData()
-    }
-}
-
-// Debugging function which deletes all categories from core data
-fileprivate func deleteAllCategories(inContext context: NSManagedObjectContext) {
-    let deleteFetch: NSFetchRequest<NSFetchRequestResult> = Category.fetchRequest()
-    let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
-    do {
-        try context.execute(deleteRequest)
-        try context.save()
-    } catch {
-        let deleteError = error as NSError
-        print ("Unable to delete")
-        print ("\(deleteError), \(deleteError.localizedDescription)")
     }
 }
