@@ -21,6 +21,7 @@
 		3F9E2675226C1397002A5B6B /* CreateEnvelopeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E2674226C1397002A5B6B /* CreateEnvelopeViewController.swift */; };
 		3FB380BC226DF914002CCADC /* ModalViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB380BB226DF914002CCADC /* ModalViewDelegate.swift */; };
 		3FB380BE226FF16F002CCADC /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB380BD226FF16F002CCADC /* CoreDataManager.swift */; };
+		3FBA43112272144D0031A103 /* EnvelopesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA43102272144D0031A103 /* EnvelopesController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		3F9E2674226C1397002A5B6B /* CreateEnvelopeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEnvelopeViewController.swift; sourceTree = "<group>"; };
 		3FB380BB226DF914002CCADC /* ModalViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewDelegate.swift; sourceTree = "<group>"; };
 		3FB380BD226FF16F002CCADC /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		3FBA43102272144D0031A103 /* EnvelopesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvelopesController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 				3F05E78922652113009C4654 /* Envelopes.xcdatamodeld */,
 				3F9E266A226A6CA8002A5B6B /* EnvelopeTableViewController.swift */,
 				3FB380BD226FF16F002CCADC /* CoreDataManager.swift */,
+				3FBA43102272144D0031A103 /* EnvelopesController.swift */,
 				3F9E2670226B872E002A5B6B /* CategoryHeaderCell.swift */,
 				3F9E2672226B873B002A5B6B /* CategoryFooterCell.swift */,
 				3F9E266E226A6FEB002A5B6B /* CreateCategoryViewController.swift */,
@@ -224,6 +227,7 @@
 				3FB380BC226DF914002CCADC /* ModalViewDelegate.swift in Sources */,
 				3F9E2671226B872E002A5B6B /* CategoryHeaderCell.swift in Sources */,
 				3F9E2673226B873B002A5B6B /* CategoryFooterCell.swift in Sources */,
+				3FBA43112272144D0031A103 /* EnvelopesController.swift in Sources */,
 				3F9E266D226A6FA6002A5B6B /* EnvelopeViewController.swift in Sources */,
 				3F67F88622612BCE002F05B1 /* AppDelegate.swift in Sources */,
 				3F9E266F226A6FEB002A5B6B /* CreateCategoryViewController.swift in Sources */,

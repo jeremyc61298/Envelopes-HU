@@ -13,6 +13,7 @@ class EnvelopeTableViewController: UITableViewController {
     
     // Instantiate the CoreDataManager
     let cdm = CoreDataManager.getInstance()
+    let envelopesController = EnvelopesController.getInstance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,47 +30,26 @@ class EnvelopeTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // TODO: Should this be numberOfObjects or sections.count?
-        if let categories = cdm.categoriesFRC.fetchedObjects {
-           return categories.count
+        if let numCategories = envelopesController.getNumberOfCategories() {
+           return numCategories
         }
         return 0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sections = cdm.envelopesFRC.sections {
-            if section < sections.count {
-                let currentSectionInfo = sections[section]
-                return currentSectionInfo.numberOfObjects
-            }
+        if let section = envelopesController.getNumberOfEnvelopes(inSection: section) {
+            return section
         }
         return 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "envelopeCell", for: indexPath)
+
+        let envelope = envelopesController.envelopeAtIndexPath(indexPath)
+        cell.textLabel?.text = envelope.title
+        cell.detailTextLabel?.text = String(envelope.totalAmount)
         
-        // Make sure that the envelope actually exists
-        // TODO: This method does not work
-        // Instead of this, I need a large change. I need to receive the data somewhere else,
-        // in some function. Then I need to sort the data to represent my view. THEN I can
-        // display the data correctly
-        if let category = cdm.categoriesFRC.fetchedObjects?[indexPath.section] {
-            if let envelope = category.envelopes?.allObjects[indexPath.row] as? Envelope {
-                cell.textLabel?.text = envelope.title
-                cell.detailTextLabel?.text = String(envelope.totalAmount)
-            }
-        }
-        
-//        if let numSectionsWithEnvelopes = cdm.envelopesFRC.sections?.count {
-//            if (numSectionsWithEnvelopes < indexPath.section) {
-//                let envelope = cdm.envelopesFRC.object(at: indexPath)
-//
-//                // Configure the cell...
-//                cell.textLabel?.text = envelope.title
-//                cell.detailTextLabel?.text = String(envelope.totalAmount)
-//            }
-//        }
         return cell
     }
     
@@ -77,12 +57,8 @@ class EnvelopeTableViewController: UITableViewController {
         // Custom header cell can go here, with section title and also an AddEnvelope button
         let headerCell = tableView.dequeueReusableCell(withIdentifier: "categoryHeaderCell") as! CategoryHeaderCell
         
-        // Populate category name
-        if let sections = cdm.categoriesFRC.fetchedObjects {
-            let currentSection = sections[section]
-            headerCell.categoryName.text = currentSection.title
-            
-            // This here is ugly
+        if let sectionName = envelopesController.getNameForCategory(section: section) {
+            headerCell.categoryName.text = sectionName
             headerCell.addEnvelope.sectionNumber = section
         }
 
@@ -186,7 +162,7 @@ class EnvelopeTableViewController: UITableViewController {
                 if let destination = nav.viewControllers.first as? CreateEnvelopeViewController {
                     let section = (sender as! AddEnvelopeButton).sectionNumber
                     destination.delegate = self
-                    destination.category = cdm.categoriesFRC.fetchedObjects![section!]
+                    destination.section = section
                 }
             }
         }

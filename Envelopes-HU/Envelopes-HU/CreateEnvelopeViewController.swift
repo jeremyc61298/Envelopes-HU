@@ -12,9 +12,10 @@ class CreateEnvelopeViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var envelopeName: UITextField!
     @IBOutlet weak var envelopeAmount: UITextField!
-    var category: Category!
+    var section: Int!
     var delegate: ModalViewDelegate!
     let cdm = CoreDataManager.getInstance()
+    let envelopesController = EnvelopesController.getInstance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +35,9 @@ class CreateEnvelopeViewController: UIViewController, UITextFieldDelegate {
         // Go back to the main nav controller
         dismiss(animated: true) 
     }
+    
     @IBAction func createEnvelope(_ sender: UIBarButtonItem) {
-        
-        if let errMsg = cdm.createEnvelope(inCategory: self.category, withTitle: envelopeName.text!, withAmount: Double(envelopeAmount.text!)) {
+        if let errMsg = envelopesController.addEnvelope(toSection: section, withTitle: envelopeName.text!, withAmount: Double(envelopeAmount.text!)) {
             showMessage(message: errMsg)
         } else {
             // Go back to the main controller

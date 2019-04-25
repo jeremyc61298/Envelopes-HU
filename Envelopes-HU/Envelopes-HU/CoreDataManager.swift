@@ -27,6 +27,8 @@ class CoreDataManager {
     // ViewContext for the application
     let context: NSManagedObjectContext
     
+    // ---- 
+    
     // ---- FetchedResultControllers ---- //
     
     // Array of all the fetchedResultControllers for mass fetching
