@@ -10,28 +10,46 @@ import UIKit
 
 class CreateEnvelopeViewController: UIViewController, UITextFieldDelegate {
 
-
     @IBOutlet weak var envelopeName: UITextField!
     @IBOutlet weak var envelopeAmount: UITextField!
+    var category: Category!
     var delegate: ModalViewDelegate!
+    let cdm = CoreDataManager.getInstance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        // UITextField Delegation
         envelopeName.delegate = self
         envelopeAmount.delegate = self
     }
     
-    @IBAction func cancelCreation(_ sender: UIBarButtonItem) {
-        // Go back to the main nav controller
-        dismiss(animated: true) {
-            if self.delegate != nil {
-                self.delegate.modalDismissed()             
-            }
+    override func viewWillDisappear(_ animated: Bool) {
+        if self.delegate != nil {
+            self.delegate.modalDismissed()
         }
     }
-
+    
+    @IBAction func cancelCreation(_ sender: UIBarButtonItem) {
+        // Go back to the main nav controller
+        dismiss(animated: true) 
+    }
+    @IBAction func createEnvelope(_ sender: UIBarButtonItem) {
+        
+        if let errMsg = cdm.createEnvelope(inCategory: self.category, withTitle: envelopeName.text!, withAmount: Double(envelopeAmount.text!)) {
+            showMessage(message: errMsg)
+        } else {
+            // Go back to the main controller
+            dismiss(animated: true)
+        }
+    }
+    
+    func showMessage(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title:"Okay", style: .default))
+        self.present(alert, animated: true)
+    }
+    
     // UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()

@@ -7,45 +7,12 @@
 //
 
 import UIKit
-import CoreData
+
 
 class EnvelopeTableViewController: UITableViewController {
     
-    // ManagedObjectContext for this application
-//    var context: NSManagedObjectContext!
-//
-//    // FecthedResultsController for Envelope entity
-//    fileprivate lazy var envelopesFetchedResultsController: NSFetchedResultsController<Envelope> = {
-//        // Get all the Envelopes from CoreData
-//        let request: NSFetchRequest<Envelope> = Envelope.fetchRequest()
-//
-//        // Must use a sort descriptor here
-//        let sortTitle = NSSortDescriptor(key: "title", ascending: true)
-//        request.sortDescriptors = [sortTitle]
-//
-//        // Create fetchResultsController
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.context, sectionNameKeyPath: "category.title", cacheName: nil)
-//
-//        return frc
-//    }()
-//
-//    // FetchResultsController for Category entity
-//    fileprivate lazy var categoriesFetchedResultsController: NSFetchedResultsController<Category> = {
-//        // Get all the Categories from CoreData
-//        let request: NSFetchRequest<Category> = Category.fetchRequest()
-//
-//        // Sort by something here
-//        let sortTitle = NSSortDescriptor(key: "title", ascending: true)
-//        request.sortDescriptors = [sortTitle]
-//
-//        // Create Controller
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.context, sectionNameKeyPath: nil, cacheName: nil)
-//
-//        return frc
-//    }()
-    
     // Instantiate the CoreDataManager
-    let cdm = CoreDataManager()
+    let cdm = CoreDataManager.getInstance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,22 +20,10 @@ class EnvelopeTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
         
-        // Get ManagedObjectContext
-        //self.context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
-        //deleteAllCategories(inContext: context)
-        
-        // Perform fetch on fetchRequestController
-//        fetchEnvelopesToController()
-//        fetchCategoriesToController()
+        //cdm.deleteAllCategories()
         
         // Initialize all the fetchedResultsControllers in CoreDataManager
         cdm.fetchAll()
-    }
-    
-    func reloadViewAndData() {
-        cdm.fetchAll()
-        self.tableView.reloadData()
     }
     
     // MARK: - Table view data source
@@ -90,21 +45,31 @@ class EnvelopeTableViewController: UITableViewController {
         }
         return 0
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "envelopeCell", for: indexPath)
         
         // Make sure that the envelope actually exists
-        if let numSectionsWithEnvelopes = cdm.envelopesFRC.sections?.count {
-            if (numSectionsWithEnvelopes < indexPath.section) {
-                let envelope = cdm.envelopesFRC.object(at: indexPath)
-                
-                // Configure the cell...
+        // TODO: This method does not work
+        // Instead of this, I need a large change. I need to receive the data somewhere else,
+        // in some function. Then I need to sort the data to represent my view. THEN I can
+        // display the data correctly
+        if let category = cdm.categoriesFRC.fetchedObjects?[indexPath.section] {
+            if let envelope = category.envelopes?.allObjects[indexPath.row] as? Envelope {
                 cell.textLabel?.text = envelope.title
                 cell.detailTextLabel?.text = String(envelope.totalAmount)
             }
         }
+        
+//        if let numSectionsWithEnvelopes = cdm.envelopesFRC.sections?.count {
+//            if (numSectionsWithEnvelopes < indexPath.section) {
+//                let envelope = cdm.envelopesFRC.object(at: indexPath)
+//
+//                // Configure the cell...
+//                cell.textLabel?.text = envelope.title
+//                cell.detailTextLabel?.text = String(envelope.totalAmount)
+//            }
+//        }
         return cell
     }
     
@@ -116,6 +81,9 @@ class EnvelopeTableViewController: UITableViewController {
         if let sections = cdm.categoriesFRC.fetchedObjects {
             let currentSection = sections[section]
             headerCell.categoryName.text = currentSection.title
+            
+            // This here is ugly
+            headerCell.addEnvelope.sectionNumber = section
         }
 
         return headerCell
@@ -146,17 +114,26 @@ class EnvelopeTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            // Delete the row from the data source only if it is successfully deleted from CoreData
+            if let envelopeToDelete = cdm.envelopesFRC.fetchedObjects?[indexPath.row] {
+                if (cdm.deleteEnvelope(envelopeToDelete)) {
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                    self.tableView.reloadData()
+                } else {
+                    showMessage(message: "Envelope could not be deleted")
+                }
+                
+            }
+            
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+    
 
     /*
     // Override to support rearranging the table view.
@@ -172,7 +149,14 @@ class EnvelopeTableViewController: UITableViewController {
         return true
     }
     */
-
+    
+    // ---- Error Handling ---- //
+    
+    func showMessage(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title:"Okay", style: .default))
+        self.present(alert, animated: true)
+    }
     
     // MARK: - Navigation
 
@@ -182,7 +166,7 @@ class EnvelopeTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
         if segue.identifier == "envelopeSegue" {
             if let destination = segue.destination as? EnvelopeViewController{
-                // Get selected cell, its index, and header
+                // Get selected cell, its index and the section header
                 let currentCell = sender as! UITableViewCell
                 let indexPath = self.tableView.indexPath(for: currentCell)!
                 let header = self.tableView.headerView(forSection: indexPath.section)
@@ -200,7 +184,9 @@ class EnvelopeTableViewController: UITableViewController {
         } else if segue.identifier == "newEnvelopeSegue" {
             if let nav = segue.destination as? UINavigationController {
                 if let destination = nav.viewControllers.first as? CreateEnvelopeViewController {
+                    let section = (sender as! AddEnvelopeButton).sectionNumber
                     destination.delegate = self
+                    destination.category = cdm.categoriesFRC.fetchedObjects![section!]
                 }
             }
         }
@@ -227,15 +213,14 @@ extension EnvelopeTableViewController: CategoryFooterCellDelegate {
         requestToDelete.addAction(cancelAction)
         self.present(requestToDelete, animated: true, completion: nil)
     }
-    
-    // Should this stay here?
+
     func deleteCategory(_ sectionNumber: Int) {
         // Get category
         if let categoryToDelete = cdm.categoriesFRC.fetchedObjects?[sectionNumber] {
-            // This should be handled by the CoreDataManager
-            cdm.context.delete(categoryToDelete)
-            if (cdm.saveContext(errorMsg: "Could not delete category")) {
-                self.reloadViewAndData()
+            if (!cdm.deleteCategory(categoryToDelete)) {
+                showMessage(message: "Could not delete category")
+            } else {
+                self.tableView.reloadData()                
             }
         }
     }
@@ -248,6 +233,6 @@ extension EnvelopeTableViewController: CategoryFooterCellDelegate {
 extension EnvelopeTableViewController: ModalViewDelegate {
     func modalDismissed() {
         // Update the model and reload the table
-        self.reloadViewAndData()
+        self.tableView.reloadData()
     }
 }

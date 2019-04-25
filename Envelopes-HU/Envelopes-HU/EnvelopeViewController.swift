@@ -12,7 +12,7 @@ class EnvelopeViewController: UIViewController {
 
     var selectedEnvelopeName: String!
     var selectedCategoryName: String!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

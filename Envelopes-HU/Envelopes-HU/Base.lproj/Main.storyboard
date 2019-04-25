@@ -146,7 +146,11 @@
                                 <action selector="cancelCreation:" destination="RV7-hY-jdg" id="jbZ-Go-XQ6"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Create" id="Ya9-VS-l2E"/>
+                        <barButtonItem key="rightBarButtonItem" title="Create" id="Ya9-VS-l2E">
+                            <connections>
+                                <action selector="createEnvelope:" destination="RV7-hY-jdg" id="fdG-4i-x8x"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="envelopeAmount" destination="W5o-ms-IPx" id="n1o-h6-meX"/>
@@ -193,7 +197,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X5h-2a-SeQ">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X5h-2a-SeQ" customClass="AddEnvelopeButton" customModule="Envelopes_HU" customModuleProvider="target">
                                             <rect key="frame" x="297" y="7" width="62" height="30"/>
                                             <state key="normal" title="Add Item"/>
                                             <connections>
@@ -223,6 +227,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="addEnvelope" destination="X5h-2a-SeQ" id="jxw-ec-t28"/>
                                     <outlet property="categoryName" destination="Mhu-2F-4nq" id="aOH-tY-6TK"/>
                                     <segue destination="JjQ-Ff-4KD" kind="show" identifier="envelopeSegue" id="7q8-j7-zcL"/>
                                 </connections>
