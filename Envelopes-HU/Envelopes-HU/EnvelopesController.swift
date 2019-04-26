@@ -11,6 +11,9 @@ import CoreData
 
 // Used to display envelopes in the tableview
 class EnvelopesController {
+    
+    // ---- Singleton ---- //
+    
     private static let envelopesController = EnvelopesController()
     
     static func getInstance() -> EnvelopesController {
@@ -23,6 +26,8 @@ class EnvelopesController {
     
     // Managed Object Context
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    // ---- Envelopes ---- //
     
     fileprivate lazy var fetchedEnvelopesController: NSFetchedResultsController<Envelope> = {
         let fetchRequest: NSFetchRequest<Envelope> = Envelope.fetchRequest()
@@ -50,28 +55,26 @@ class EnvelopesController {
     }
     
     func addEnvelope(toSection section: Int, withTitle title: String, withAmount amount: Double?) -> String? {
-        if let categoryTitle = getNameForCategory(section: section){
-            if let category = fetchCategory(withTitle: categoryTitle){
-                // Validate
-                let errMsg = validateEnvelope(withTitle: title, withAmount: amount)
-                if (errMsg != nil) {
-                    return errMsg
-                }
-                
-                let newEnvelope = Envelope(context: self.context)
-                newEnvelope.title = title
-                newEnvelope.totalAmount = amount!
-                newEnvelope.category = category
-                
-                let didSave = self.saveContext(errorMsg: "Could not create envelope")
-                if (!didSave) {
-                    return "Could not create envelope"
-                }
-                
-                // Successful
-                self.reloadData()
-                return nil
+        if let category = fetchedCategoriesController.fetchedObjects?[section] {
+            // Validate
+            let errMsg = validateEnvelope(withTitle: title, withAmount: amount)
+            if (errMsg != nil) {
+                return errMsg
             }
+            
+            let newEnvelope = Envelope(context: self.context)
+            newEnvelope.title = title
+            newEnvelope.totalAmount = amount!
+            newEnvelope.category = category
+            
+            let didSave = self.saveContext(errorMsg: "Could not create envelope")
+            if (!didSave) {
+                return "Could not create envelope"
+            }
+            
+            // Successful
+            self.reloadData()
+            return nil
         }
         return "Oops, we had a problem creating your envelope"
     }
@@ -112,16 +115,45 @@ class EnvelopesController {
         return true
     }
     
+    func deleteEnvelope(atIndexPath indexPath: IndexPath) -> Bool {
+        let envelopeToDelete = fetchedEnvelopesController.object(at: indexPath)
+        context.delete(envelopeToDelete)
+        if(saveContext(errorMsg: "Could not delete envelope")) {
+            self.reloadData()
+            return true
+        }
+        return false
+    }
+    
+    // ---- Categories ---- //
+    
+    fileprivate lazy var fetchedCategoriesController: NSFetchedResultsController<Category> = {
+        let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
+        
+        // This sort descriptor MUST be the same as one of the Envelope Descriptors to
+        // make sure the 2 controllers are parallel
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "title", ascending: true)
+        ]
+        
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.context, sectionNameKeyPath: nil, cacheName: nil)
+        
+        try! controller.performFetch()
+        
+        return controller
+        
+    }()
+    
     func getNumberOfCategories() -> Int? {
-        return fetchedEnvelopesController.sections?.count
+        return fetchedCategoriesController.fetchedObjects?.count
     }
     
     func getNumberOfEnvelopes(inSection section: Int) -> Int? {
-        return fetchedEnvelopesController.sections?[section].numberOfObjects
+        return fetchedCategoriesController.fetchedObjects?[section].envelopes?.count
     }
     
     func getNameForCategory(section: Int) -> String? {
-        return fetchedEnvelopesController.sections?[section].name
+        return fetchedCategoriesController.fetchedObjects?[section].title
     }
     
     func fetchCategory(withTitle title: String) -> Category? {
@@ -138,6 +170,67 @@ class EnvelopesController {
         }
         
         return nil
+    }
+    
+    func addCategory(withTitle title: String) -> String? {
+        // Check for empty string or too long
+        let errMsg = validateCategory(withTitle: title)
+        if (errMsg != nil) {
+            return errMsg
+        }
+        
+        // Create category and save
+        let category = Category(context: context)
+        category.title = title
+        
+        let didSave = saveContext(errorMsg: "Could not create new category")
+        if (!didSave) {
+            return "Could not create category"
+        }
+        
+        // Successful, refresh the controller
+        // Side note, why do I have to cast to this?
+        self.reloadData()
+        
+        return nil
+    }
+    
+    private func validateCategory(withTitle title: String) -> String? {
+        if (title == "") {
+            return "Please enter a valid title"
+        } else if (title.count >= 20) {
+            return "Title too long"
+        }
+        
+        let isUnique = checkForDuplicateCategory(withTitle: title)
+        if (!isUnique) {
+            return "There is already a category with that title"
+        }
+        return nil
+    }
+    
+    // Checks in the fetchedResultsController if there is any category with
+    // the new name
+    func checkForDuplicateCategory(withTitle title: String) -> Bool {
+        if let categories = fetchedCategoriesController.fetchedObjects {
+            for category in categories {
+                if (category.title == title) {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    
+    func deleteCategory(withSectionNumber section: Int) -> Bool {
+        if let category = fetchedCategoriesController.fetchedObjects?[section] {
+            context.delete(category)
+            if (saveContext(errorMsg: "Could not delete category")) {
+                self.reloadData()
+                return true
+            }
+        }
+        return false
     }
     
     // Save to the current context in the controller
@@ -157,6 +250,7 @@ class EnvelopesController {
     func reloadData() {
         do {
             try fetchedEnvelopesController.performFetch()
+            try fetchedCategoriesController.performFetch()
         } catch {
             let fetchError = error as NSError
             print("Could not retrieve objects")
@@ -164,5 +258,3 @@ class EnvelopesController {
         }
     }
 }
-
-

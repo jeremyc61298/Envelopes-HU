@@ -73,7 +73,7 @@ class EnvelopeTableViewController: UITableViewController {
         // Custom footer cell goes here, with the ability to delete the section entirely
         let footerCell = tableView.dequeueReusableCell(withIdentifier: "categoryFooterCell") as! CategoryFooterCell
         footerCell.delegate = self
-        footerCell.categoryName = cdm.categoriesFRC.fetchedObjects?[section].title
+        footerCell.categoryName = envelopesController.getNameForCategory(section: section)
         footerCell.sectionNumber = section
         return footerCell
     }
@@ -95,16 +95,12 @@ class EnvelopeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source only if it is successfully deleted from CoreData
-            if let envelopeToDelete = cdm.envelopesFRC.fetchedObjects?[indexPath.row] {
-                if (cdm.deleteEnvelope(envelopeToDelete)) {
-                    tableView.deleteRows(at: [indexPath], with: .fade)
-                    self.tableView.reloadData()
-                } else {
-                    showMessage(message: "Envelope could not be deleted")
-                }
-                
+            if (envelopesController.deleteEnvelope(atIndexPath: indexPath)) {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                self.tableView.reloadData()
+            } else {
+                showMessage(message: "Envelope could not be deleted")
             }
-            
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -191,13 +187,10 @@ extension EnvelopeTableViewController: CategoryFooterCellDelegate {
     }
 
     func deleteCategory(_ sectionNumber: Int) {
-        // Get category
-        if let categoryToDelete = cdm.categoriesFRC.fetchedObjects?[sectionNumber] {
-            if (!cdm.deleteCategory(categoryToDelete)) {
-                showMessage(message: "Could not delete category")
-            } else {
-                self.tableView.reloadData()                
-            }
+        if (envelopesController.deleteCategory(withSectionNumber: sectionNumber)) {
+            self.tableView.reloadData()
+        } else {
+            showMessage(message: "Could not delete category")
         }
     }
 }

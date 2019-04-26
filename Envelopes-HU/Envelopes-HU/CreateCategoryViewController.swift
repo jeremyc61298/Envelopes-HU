@@ -12,7 +12,7 @@ class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var categoryName: UITextField!
     var delegate: ModalViewDelegate!
-    let cdm = CoreDataManager.getInstance()
+    let envelopesController = EnvelopesController.getInstance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,7 @@ class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
     // Create a new category and place it in Core Data
     // Connect to the model in core data
     @IBAction func createCategory(_ sender: UIBarButtonItem) {
-        if let errMsg = cdm.createCategory(withTitle: categoryName.text!) {
+        if let errMsg = envelopesController.addCategory(withTitle: categoryName.text!) {
             showMessage(message: errMsg)
         } else {
             // Go back to the main controller
