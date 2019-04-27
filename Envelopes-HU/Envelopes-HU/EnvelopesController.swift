@@ -27,6 +27,32 @@ class EnvelopesController {
     // Managed Object Context
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
+    // Save to the current context in the controller
+    // Returns whether or not it was successful
+    func saveContext(errorMsg: String) -> Bool {
+        do {
+            try context.save()
+            return true
+        } catch {
+            let saveError = error as NSError
+            print(errorMsg)
+            print("\(saveError), \(saveError.localizedDescription)")
+            return false
+        }
+    }
+    
+    // Refetch to the controllers
+    func reloadData() {
+        do {
+            try fetchedEnvelopesController.performFetch()
+            try fetchedCategoriesController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("Could not retrieve objects")
+            print ("\(fetchError), \(fetchError.localizedDescription)")
+        }
+    }
+    
     // ---- Envelopes ---- //
     
     fileprivate lazy var fetchedEnvelopesController: NSFetchedResultsController<Envelope> = {
@@ -54,16 +80,21 @@ class EnvelopesController {
         return fetchedEnvelopesController.object(at: indexPath)
     }
     
+    func getEnvelope(withTitle title: String) -> Envelope? {
+        return fetchedEnvelopesController.fetchedObjects?.filter({$0.title == title}).first
+    }
+    
     func addEnvelope(toSection section: Int, withTitle title: String, withAmount amount: Double?) -> String? {
         if let category = fetchedCategoriesController.fetchedObjects?[section] {
             // Validate
-            let errMsg = validateEnvelope(withTitle: title, withAmount: amount)
+            let errMsg = validateEnvelope(withTitle: title, withStartingAmount: amount, withTotalAmount: amount, ignoreUnique: false)
             if (errMsg != nil) {
                 return errMsg
             }
             
             let newEnvelope = Envelope(context: self.context)
             newEnvelope.title = title
+            newEnvelope.startingAmount = amount!
             newEnvelope.totalAmount = amount!
             newEnvelope.category = category
             
@@ -79,7 +110,7 @@ class EnvelopesController {
         return "Oops, we had a problem creating your envelope"
     }
     
-    private func validateEnvelope(withTitle title: String, withAmount amount: Double?) -> String? {
+    private func validateEnvelope(withTitle title: String, withStartingAmount startingAmount: Double?, withTotalAmount totalAmount: Double?, ignoreUnique: Bool) -> String? {
         if (title == "") {
             return "Please enter a valid title"
         }
@@ -88,18 +119,29 @@ class EnvelopesController {
             return "Title name too long"
         }
         
-        let isUnique = checkForDuplicateEnvelope(withTitle: title)
-        if (!isUnique) {
-            return "There is already an envelope with that title"
+        if (!ignoreUnique) {
+            let isUnique = checkForDuplicateEnvelope(withTitle: title)
+            if (!isUnique) {
+                return "There is already an envelope with that title"
+            }
         }
         
-        if (amount == nil) {
-            return "Please enter a valid amount"
+        if (startingAmount == nil) {
+            return "Starting amount cannot be empty"
         }
         
-        if (amount! < 0.0) {
-            return "Please enter a positive amount"
+        if (startingAmount! < 0.0) {
+            return "Starting amount must be positive"
         }
+        
+        if (totalAmount == nil) {
+            return "Total amount cannot be empty"
+        }
+        
+        if (totalAmount! < 0.0) {
+            return "Total amount must be positive"
+        }
+        
         
         return nil
     }
@@ -113,6 +155,31 @@ class EnvelopesController {
             }
         }
         return true
+    }
+    
+    func updateEnvelope(withOldTitle oldTitle: String, toNewTitle newTitle: String, toNewStartingAmount newStartingAmount: Double?, toNewTotalAmount newTotalAmount: Double?) -> String? {
+        
+        let errMsg = validateEnvelope(withTitle: newTitle, withStartingAmount: newStartingAmount, withTotalAmount: newTotalAmount, ignoreUnique: true)
+        if (errMsg != nil) {
+            return errMsg
+        }
+        
+        if let envelopeToUpdate = self.getEnvelope(withTitle: oldTitle) {
+            envelopeToUpdate.title = newTitle
+            envelopeToUpdate.startingAmount = newStartingAmount!
+            envelopeToUpdate.totalAmount = newTotalAmount!
+        } else {
+            return "Could not find envelope to update"
+        }
+        
+        let didSave = self.saveContext(errorMsg: "Could not update envelope")
+        if (!didSave) {
+            return "Could not update envelope"
+        }
+        
+        // Successful
+        self.reloadData()
+        return nil
     }
     
     func deleteEnvelope(atIndexPath indexPath: IndexPath) -> Bool {
@@ -233,28 +300,116 @@ class EnvelopesController {
         return false
     }
     
-    // Save to the current context in the controller
-    // Returns whether or not it was successful
-    func saveContext(errorMsg: String) -> Bool {
-        do {
-            try context.save()
-            return true
-        } catch {
-            let saveError = error as NSError
-            print(errorMsg)
-            print("\(saveError), \(saveError.localizedDescription)")
-            return false
-        }
-    }
+    // ---- Transactions ---- //
     
-    func reloadData() {
+    func fetchTransactions(forEnvelope envelopeTitle: String) -> [Transaction]? {
+        let fetchRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
+        
+        fetchRequest.predicate = NSPredicate(format: "envelope.title = %@", envelopeTitle)
+        
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "date", ascending: false)
+        ]
+        
         do {
-            try fetchedEnvelopesController.performFetch()
-            try fetchedCategoriesController.performFetch()
+            let transactions = try context.fetch(fetchRequest)
+            return transactions
         } catch {
             let fetchError = error as NSError
-            print("Could not retrieve objects")
+            print("Could not retrieve transactions for envelope \(envelopeTitle)")
             print ("\(fetchError), \(fetchError.localizedDescription)")
         }
+        return nil
+    }
+    
+    // Validate user input and then save a new transaction to CoreData
+    // Return an error message if validation fails
+    func addTransaction(toEnvelope envelopeTitle: String,
+                        withTitle title: String,
+                        withAmount amount: Double?,
+                        withDate date: Date?,
+                        withNote note: String?,
+                        isExpense: Bool) -> String? {
+        
+        let errMsg = validateTransaction(title, amount, date)
+        if (errMsg != nil) {
+            // Transaction was invalid, return with error message
+            return errMsg
+        }
+        
+        let transaction = Transaction(context: self.context)
+        transaction.envelope = self.getEnvelope(withTitle: envelopeTitle)
+        transaction.title = title
+        transaction.amount = amount!
+        transaction.date = date
+        transaction.note = note
+        transaction.isExpense = isExpense
+        
+        
+        let didSave = saveContext(errorMsg: "Could not add transaction to envelope \(envelopeTitle)")
+        if (!didSave) {
+            // Something went wrong with CoreData
+            return "Could not add transaction"
+        }
+        
+        return nil
+    }
+    
+    func validateTransaction(_ title: String, _ amount: Double?, _ date: Date?) -> String? {
+        if (title == "") {
+            return "Please enter a valid title"
+        } else if (title.count > 20) {
+            return "Title too long"
+        }
+        
+        if (amount == nil) {
+            return "Please enter a valid amount"
+        } else if (amount! < 0.0) {
+            return "Please enter a positive amount"
+        }
+        
+        if (date == nil) {
+            return "Please enter date"
+        }
+        
+        // Successful validation
+        return nil
+    }
+    
+    func updateTransaction(_ transaction: Transaction,
+                           withTitle title: String,
+                           withAmount amount: Double?,
+                           withDate date: Date?,
+                           withNote note: String?,
+                           isExpense: Bool) -> String? {
+        
+        let errMsg = validateTransaction(title, amount, date)
+        if (errMsg != nil) {
+            // Transaction was invalid, return with error message
+            return errMsg
+        }
+        
+        transaction.title = title
+        transaction.amount = amount!
+        transaction.date = date!
+        transaction.note = note
+        transaction.isExpense = isExpense
+        
+        if (!saveContext(errorMsg: "Could not update transaction")) {
+            return "Something went wrong when updating the transaction"
+        }
+    
+        self.reloadData()
+        return nil
+    }
+
+    
+    func deleteTransaction(_ transaction: Transaction) -> Bool {
+        context.delete(transaction)
+        if (saveContext(errorMsg: "Could not delete transaction")) {
+            self.reloadData()
+            return true
+        }
+            return false
     }
 }

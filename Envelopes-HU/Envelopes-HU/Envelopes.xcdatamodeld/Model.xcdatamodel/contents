@@ -6,6 +6,7 @@
     </entity>
     <entity name="Envelope" representedClassName="Envelope" syncable="YES" codeGenerationType="class">
         <attribute name="internalOrder" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="startingAmount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="title" attributeType="String" defaultValueString="New Envelope" syncable="YES"/>
         <attribute name="totalAmount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="category" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="envelopes" inverseEntity="Category" syncable="YES"/>
@@ -21,7 +22,7 @@
     </entity>
     <elements>
         <element name="Category" positionX="-290.01171875" positionY="-84.3671875" width="128" height="73"/>
-        <element name="Envelope" positionX="-63" positionY="-18" width="128" height="118"/>
-        <element name="Transaction" positionX="147.203125" positionY="-70.140625" width="128" height="133"/>
+        <element name="Envelope" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="Transaction" positionX="147.203125" positionY="-70.140625" width="128" height="135"/>
     </elements>
 </model>

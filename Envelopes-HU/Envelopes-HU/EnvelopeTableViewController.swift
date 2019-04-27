@@ -11,8 +11,7 @@ import UIKit
 
 class EnvelopeTableViewController: UITableViewController {
     
-    // Instantiate the CoreDataManager
-    let cdm = CoreDataManager.getInstance()
+    // Instantiate the Core Data Controller
     let envelopesController = EnvelopesController.getInstance()
     
     override func viewDidLoad() {
@@ -20,11 +19,6 @@ class EnvelopeTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
-        
-        //cdm.deleteAllCategories()
-        
-        // Initialize all the fetchedResultsControllers in CoreDataManager
-        cdm.fetchAll()
     }
     
     // MARK: - Table view data source
@@ -48,7 +42,7 @@ class EnvelopeTableViewController: UITableViewController {
 
         let envelope = envelopesController.envelopeAtIndexPath(indexPath)
         cell.textLabel?.text = envelope.title
-        cell.detailTextLabel?.text = String(envelope.totalAmount)
+        cell.detailTextLabel?.text = String(format: "%.2f", envelope.totalAmount)
         
         return cell
     }
@@ -137,15 +131,19 @@ class EnvelopeTableViewController: UITableViewController {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         if segue.identifier == "envelopeSegue" {
-            if let destination = segue.destination as? EnvelopeViewController{
-                // Get selected cell, its index and the section header
+            if let destination = segue.destination as? TransactionTableViewController {
+                // Get selected cell
                 let currentCell = sender as! UITableViewCell
-                let indexPath = self.tableView.indexPath(for: currentCell)!
-                let header = self.tableView.headerView(forSection: indexPath.section)
                 
                 // Populate the destination's values with the table cell's values
-                destination.selectedEnvelopeName = currentCell.textLabel!.text!
-                destination.selectedCategoryName = header?.textLabel!.text!
+                destination.selectedEnvelopeTitle = currentCell.textLabel!.text!
+                
+                let envelope = envelopesController.getEnvelope(withTitle: currentCell.textLabel!.text!)!
+                destination.selectedEnvelopeTotalAmount = Double(currentCell.detailTextLabel!.text!)
+                destination.selectedEnvelopeStartingAmount = envelope.startingAmount
+                
+                // Delegate for unwinding
+                destination.delegate = self
             }
         } else if segue.identifier == "newCategorySegue" {
             if let nav = segue.destination as? UINavigationController {
@@ -201,7 +199,7 @@ extension EnvelopeTableViewController: CategoryFooterCellDelegate {
 // segue occurs, so none of the view life cycle functions are triggered
 extension EnvelopeTableViewController: ModalViewDelegate {
     func modalDismissed() {
-        // Update the model and reload the table
+        // Reload the table
         self.tableView.reloadData()
     }
 }

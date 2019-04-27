@@ -22,6 +22,7 @@ class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         if self.delegate != nil {
             self.delegate.modalDismissed()
         }

@@ -1,5 +1,5 @@
 //
-//  ModalViewDelegate.swift
+//  DelegateProtocols.swift
 //  Envelopes-HU
 //
 //  Created by Jeremy Campbell on 4/22/19.
@@ -8,4 +8,8 @@
 
 protocol ModalViewDelegate {
     func modalDismissed()
+}
+
+protocol TransactionHeaderCellDelegate {
+    func clearAllTransactions()
 }

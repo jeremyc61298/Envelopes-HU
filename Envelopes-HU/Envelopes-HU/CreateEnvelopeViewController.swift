@@ -14,7 +14,6 @@ class CreateEnvelopeViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var envelopeAmount: UITextField!
     var section: Int!
     var delegate: ModalViewDelegate!
-    let cdm = CoreDataManager.getInstance()
     let envelopesController = EnvelopesController.getInstance()
     
     override func viewDidLoad() {
@@ -26,6 +25,7 @@ class CreateEnvelopeViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         if self.delegate != nil {
             self.delegate.modalDismissed()
         }
