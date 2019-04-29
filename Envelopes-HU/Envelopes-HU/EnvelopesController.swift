@@ -46,6 +46,7 @@ class EnvelopesController {
         do {
             try fetchedEnvelopesController.performFetch()
             try fetchedCategoriesController.performFetch()
+            mapEnvelopeSectionsToCategory()
         } catch {
             let fetchError = error as NSError
             print("Could not retrieve objects")
@@ -72,12 +73,32 @@ class EnvelopesController {
         return controller
     }()
     
+    private var map: [Int] = []
+    
+    private func mapEnvelopeSectionsToCategory() {
+        // Don't forget to clear the map before I start appending
+        if let categories = fetchedCategoriesController.fetchedObjects {
+            map.removeAll()
+            for i in 0..<categories.count {
+                if categories[i].envelopes!.count != 0 {
+                    // Category is not empty
+                    map.append(i)
+                }
+            }
+        }
+    }
+    
     func fetchedEnvelopes() -> [Envelope] {
         return fetchedEnvelopesController.fetchedObjects ?? []
     }
     
     func envelopeAtIndexPath(_ indexPath: IndexPath) -> Envelope {
-        return fetchedEnvelopesController.object(at: indexPath)
+        if map.isEmpty {
+            mapEnvelopeSectionsToCategory()
+        }
+        let mappedSection = map.firstIndex(of: indexPath.section)!
+        let mappedIndexPath = IndexPath(row: indexPath.row, section: mappedSection)
+        return fetchedEnvelopesController.object(at: mappedIndexPath)
     }
     
     func getEnvelope(withTitle title: String) -> Envelope? {
@@ -300,6 +321,17 @@ class EnvelopesController {
         return false
     }
     
+    // Debug function
+    func deleteAllCategories() {
+        if let categories = fetchedCategoriesController.fetchedObjects {
+            for category in categories {
+                context.delete(category)
+            }
+            let _ = saveContext(errorMsg: "Could not delete all categories")
+            self.reloadData()
+        }
+    }
+    
     // ---- Transactions ---- //
     
     func fetchTransactions(forEnvelope envelopeTitle: String) -> [Transaction]? {
@@ -331,7 +363,7 @@ class EnvelopesController {
                         withNote note: String?,
                         isExpense: Bool) -> String? {
         
-        let errMsg = validateTransaction(title, amount, date)
+        let errMsg = validateTransaction(title, amount, date, isExpense, envelopeTitle)
         if (errMsg != nil) {
             // Transaction was invalid, return with error message
             return errMsg
@@ -355,24 +387,40 @@ class EnvelopesController {
         return nil
     }
     
-    func validateTransaction(_ title: String, _ amount: Double?, _ date: Date?) -> String? {
+    func validateTransaction(_ title: String, _ amount: Double?, _ date: Date?, _ isExpense: Bool, _ envelopeTitle: String) -> String? {
         if (title == "") {
             return "Please enter a valid title"
         } else if (title.count > 20) {
             return "Title too long"
         }
         
-        if (amount == nil) {
-            return "Please enter a valid amount"
-        } else if (amount! < 0.0) {
-            return "Please enter a positive amount"
+        if let err = validateAmount(amount) {
+            return err
         }
         
         if (date == nil) {
             return "Please enter date"
         }
         
+        // Make sure the transaction doesn't drop the envelope total below zero
+        if (isExpense) {
+            let envelope = self.getEnvelope(withTitle: envelopeTitle)
+            
+            if ((envelope!.totalAmount - amount!) < 0) {
+                return "Lack of funds for an expense of $\(String(format: "%.2f", amount!))"
+            }
+        }
+        
         // Successful validation
+        return nil
+    }
+    
+    private func validateAmount(_ amount: Double?) -> String? {
+        if (amount == nil) {
+            return "Please enter a valid amount"
+        } else if (amount! < 0.0) {
+            return "Please enter a positive amount"
+        }
         return nil
     }
     
@@ -382,8 +430,19 @@ class EnvelopesController {
                            withDate date: Date?,
                            withNote note: String?,
                            isExpense: Bool) -> String? {
+        // Specifically when updating, need to check whether the isExpense field changed from false to true
+        if (isExpense && !transaction.isExpense) {
+            let envelope = self.getEnvelope(withTitle: transaction.envelope!.title!)
+            if let errMsg = validateAmount(amount) {
+                return errMsg
+            }
+            if ((envelope!.totalAmount - amount! - amount!) < 0) {
+                return "Lack of funds for an expense of $\(String(format: "%.2f", amount!))"
+            }
+        }
         
-        let errMsg = validateTransaction(title, amount, date)
+        
+        let errMsg = validateTransaction(title, amount, date, isExpense, transaction.envelope!.title!)
         if (errMsg != nil) {
             // Transaction was invalid, return with error message
             return errMsg

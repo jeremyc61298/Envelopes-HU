@@ -26,7 +26,7 @@ class TransactionTableViewController: UITableViewController, UITextFieldDelegate
     
     // View outlets
     @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var amountTextField: UITextField!
+    @IBOutlet weak var amountLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +41,7 @@ class TransactionTableViewController: UITableViewController, UITextFieldDelegate
         
         // Populate Transactions and calculate totals
         self.reloadTransactions()
-        self.amountTextField.text = String(format: "%.2f", calculateTotalAmount(fromStartingAmount: selectedEnvelopeStartingAmount))
+        self.amountLabel.text = "$" + String(format: "%.2f", calculateTotalAmount(fromStartingAmount: selectedEnvelopeStartingAmount))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -75,7 +75,7 @@ class TransactionTableViewController: UITableViewController, UITextFieldDelegate
             let currentTransaction = trans[indexPath.row]
             // Don't know why the title is optional, it should not be
             cell.textLabel?.text = currentTransaction.title
-            cell.detailTextLabel?.text = String(format: "%.2f", currentTransaction.amount)
+            cell.detailTextLabel?.text = "$" + String(format: "%.2f", currentTransaction.amount)
             if (currentTransaction.isExpense) {
                 cell.detailTextLabel?.text = "-" + cell.detailTextLabel!.text!
                 cell.detailTextLabel?.textColor = .red
@@ -195,7 +195,7 @@ class TransactionTableViewController: UITableViewController, UITextFieldDelegate
     func updateEnvelopeTotal() {
         // Calculate Total
         let newTotal = calculateTotalAmount(fromStartingAmount: selectedEnvelopeStartingAmount)
-        self.amountTextField.text = String(format: "%.2f", newTotal)
+        self.amountLabel.text = "$" + String(format: "%.2f", newTotal)
         
         // Update envelope
         let errMsg = envelopesController.updateEnvelope(withOldTitle: selectedEnvelopeTitle, toNewTitle: selectedEnvelopeTitle, toNewStartingAmount: selectedEnvelopeStartingAmount, toNewTotalAmount: newTotal)

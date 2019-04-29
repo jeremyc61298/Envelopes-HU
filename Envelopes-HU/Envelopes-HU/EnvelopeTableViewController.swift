@@ -19,6 +19,8 @@ class EnvelopeTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
+        
+        //envelopesController.deleteAllCategories()
     }
     
     // MARK: - Table view data source
@@ -42,7 +44,7 @@ class EnvelopeTableViewController: UITableViewController {
 
         let envelope = envelopesController.envelopeAtIndexPath(indexPath)
         cell.textLabel?.text = envelope.title
-        cell.detailTextLabel?.text = String(format: "%.2f", envelope.totalAmount)
+        cell.detailTextLabel?.text = "$" + String(format: "%.2f", envelope.totalAmount)
         
         return cell
     }
@@ -60,7 +62,7 @@ class EnvelopeTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50.0
+        return 70.0
     }
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView {
