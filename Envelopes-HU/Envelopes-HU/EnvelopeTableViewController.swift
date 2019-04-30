@@ -27,7 +27,13 @@ class EnvelopeTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         if let numCategories = envelopesController.getNumberOfCategories() {
-           return numCategories
+            if (numCategories == 0) {
+                // Set tableheader
+                self.tableView.tableFooterView = tableView.dequeueReusableCell(withIdentifier: "tableFooterCell")
+            } else {
+                self.tableView.tableFooterView = nil
+            }
+            return numCategories
         }
         return 0
     }
@@ -56,6 +62,8 @@ class EnvelopeTableViewController: UITableViewController {
         if let sectionName = envelopesController.getNameForCategory(section: section) {
             headerCell.categoryName.text = sectionName
             headerCell.addEnvelope.sectionNumber = section
+            headerCell.sectionNumber = section
+            headerCell.delegate = self
         }
 
         return headerCell
@@ -65,17 +73,27 @@ class EnvelopeTableViewController: UITableViewController {
         return 70.0
     }
     
+    
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView {
         // Custom footer cell goes here, with the ability to delete the section entirely
-        let footerCell = tableView.dequeueReusableCell(withIdentifier: "categoryFooterCell") as! CategoryFooterCell
-        footerCell.delegate = self
-        footerCell.categoryName = envelopesController.getNameForCategory(section: section)
-        footerCell.sectionNumber = section
-        return footerCell
+        if let numEnvelopes = envelopesController.getNumberOfEnvelopes(inSection: section){
+            if (numEnvelopes == 0) {
+                let footerCell = tableView.dequeueReusableCell(withIdentifier: "categoryFooterCell")!
+                return footerCell
+                
+            }
+        }
+        // Return blank view
+        return UIView()
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 50.0
+        if let numEnvelopes = envelopesController.getNumberOfEnvelopes(inSection: section){
+            if (numEnvelopes == 0) {
+                return 30.0
+            }
+        }
+        return 20.0
     }
 
     /*
@@ -167,14 +185,14 @@ class EnvelopeTableViewController: UITableViewController {
 
 // CategoryFooterCellDelegate
 // Handler called when the user wants to delete a category
-extension EnvelopeTableViewController: CategoryFooterCellDelegate {
-    func categoryFooterCell(_ categoryFooterCell: CategoryFooterCell) {
-        let categoryNameToDelete = categoryFooterCell.categoryName!
-        let sectionNumber = categoryFooterCell.sectionNumber!
+extension EnvelopeTableViewController: CategoryHeaderCellDelegate {
+    func categoryHeaderCell(_ categoryHeaderCell: CategoryHeaderCell) {
+        let categoryNameToDelete = categoryHeaderCell.categoryName!.text!
+        let sectionNumber = categoryHeaderCell.sectionNumber!
         
         // Check if the user really wants to delete the category with an action sheet
         let requestToDelete = UIAlertController(title: nil,
-                                              message: "Delete \(categoryNameToDelete)",
+                                              message: "Delete \(categoryNameToDelete) and all its contents?",
                                               preferredStyle: .actionSheet)
         let deleteAction = UIAlertAction(title: "Delete",
                                          style: .destructive,

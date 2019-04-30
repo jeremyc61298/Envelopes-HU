@@ -36,7 +36,8 @@ class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
     // Create a new category and place it in Core Data
     // Connect to the model in core data
     @IBAction func createCategory(_ sender: UIBarButtonItem) {
-        if let errMsg = envelopesController.addCategory(withTitle: categoryName.text!) {
+        let title = categoryName.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let errMsg = envelopesController.addCategory(withTitle: title) {
             showMessage(message: errMsg)
         } else {
             // Go back to the main controller

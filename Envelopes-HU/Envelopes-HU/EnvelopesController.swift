@@ -148,7 +148,7 @@ class EnvelopesController {
         }
         
         if (startingAmount == nil) {
-            return "Starting amount cannot be empty"
+            return "Please enter a valid starting amount"
         }
         
         if (startingAmount! < 0.0) {

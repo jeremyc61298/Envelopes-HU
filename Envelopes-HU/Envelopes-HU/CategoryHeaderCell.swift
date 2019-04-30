@@ -14,6 +14,7 @@ class CategoryHeaderCell: UITableViewCell {
     @IBOutlet weak var categoryName: UILabel!
     @IBOutlet weak var addEnvelope: AddEnvelopeButton!
     var sectionNumber: Int!
+    var delegate: CategoryHeaderCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,8 +27,19 @@ class CategoryHeaderCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    @IBAction func deleteCategory(_ sender: UIButton) {
+        // Notify delegate that the delete button has been pressed
+        if let d = delegate {
+            d.categoryHeaderCell(self)
+        }
+    }
+    
 }
 
 class AddEnvelopeButton: UIButton {
     var sectionNumber: Int!
+}
+
+protocol CategoryHeaderCellDelegate {
+    func categoryHeaderCell(_ categoryHeaderrCell: CategoryHeaderCell)
 }

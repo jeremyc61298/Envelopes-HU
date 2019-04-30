@@ -72,16 +72,22 @@ class CreateTransactionViewController: UIViewController, UITextFieldDelegate, UI
     
     @IBAction func createTransaction(_ sender: UIBarButtonItem) {
         let date = stringToDate(dateString: dateTextField.text)
-
+    
+        // Trim whitespace
+        let title = titleTextfield.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        let amount = amountTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        let note = notesTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         // Check if transaction is being updated or created
         if let trans = transaction {
-            if let errMsg = envelopesController.updateTransaction(trans, withTitle: titleTextfield.text!, withAmount: Double(amountTextField.text!), withDate: date, withNote: notesTextView.text, isExpense: isExpense.isOn) {
+            
+            if let errMsg = envelopesController.updateTransaction(trans, withTitle: title, withAmount: Double(amount), withDate: date, withNote: note, isExpense: isExpense.isOn) {
                 showMessage(message: errMsg)
             } else {
                 dismiss(animated: true)
             }
         } else {
-            if let errMsg = envelopesController.addTransaction(toEnvelope: currentEnvelope, withTitle: titleTextfield.text!, withAmount: Double(amountTextField.text!), withDate: date, withNote: notesTextView.text, isExpense: isExpense.isOn) {
+            if let errMsg = envelopesController.addTransaction(toEnvelope: currentEnvelope, withTitle: title, withAmount: Double(amount), withDate: date, withNote: note, isExpense: isExpense.isOn) {
                 
                 // Alert the user to the error
                 showMessage(message: errMsg)

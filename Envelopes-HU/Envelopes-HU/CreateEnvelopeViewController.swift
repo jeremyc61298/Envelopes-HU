@@ -37,7 +37,9 @@ class CreateEnvelopeViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func createEnvelope(_ sender: UIBarButtonItem) {
-        if let errMsg = envelopesController.addEnvelope(toSection: section, withTitle: envelopeName.text!, withAmount: Double(envelopeAmount.text!)) {
+        let title = envelopeName.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        let amount = envelopeAmount.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let errMsg = envelopesController.addEnvelope(toSection: section, withTitle: title, withAmount: Double(amount)) {
             showMessage(message: errMsg)
         } else {
             // Go back to the main controller
