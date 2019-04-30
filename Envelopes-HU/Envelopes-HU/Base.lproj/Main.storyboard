@@ -285,7 +285,7 @@
                                     <constraint firstItem="v3h-TH-83j" firstAttribute="leading" secondItem="W3z-oR-00H" secondAttribute="leading" id="V5Z-Yk-Ubt"/>
                                     <constraint firstAttribute="trailing" secondItem="tIU-ir-p1f" secondAttribute="trailing" id="bQW-ID-nGL"/>
                                     <constraint firstAttribute="trailing" secondItem="LLQ-Et-Bdu" secondAttribute="trailing" id="oCM-DO-cOs"/>
-                                    <constraint firstAttribute="trailing" secondItem="5Kw-38-eym" secondAttribute="trailing" constant="202" id="qUn-yy-cWm"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5Kw-38-eym" secondAttribute="trailing" constant="202" id="qUn-yy-cWm"/>
                                     <constraint firstItem="AJj-o2-aSt" firstAttribute="leading" secondItem="W3z-oR-00H" secondAttribute="leading" id="rfO-Gl-PeQ"/>
                                 </constraints>
                             </stackView>
@@ -491,7 +491,7 @@
                                     <constraints>
                                         <constraint firstItem="Mhu-2F-4nq" firstAttribute="leading" secondItem="UGf-qB-m1R" secondAttribute="leading" constant="16" id="2lr-aX-SxK"/>
                                         <constraint firstItem="7vB-v5-t8W" firstAttribute="top" secondItem="UGf-qB-m1R" secondAttribute="top" constant="36" id="O5X-ik-Nil"/>
-                                        <constraint firstItem="X5h-2a-SeQ" firstAttribute="leading" secondItem="UGf-qB-m1R" secondAttribute="leading" constant="297" id="UiS-2v-vzf"/>
+                                        <constraint firstItem="X5h-2a-SeQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="UGf-qB-m1R" secondAttribute="leading" constant="297" id="UiS-2v-vzf"/>
                                         <constraint firstAttribute="bottom" secondItem="X5h-2a-SeQ" secondAttribute="bottom" constant="35.5" id="a8K-Pj-ezv"/>
                                         <constraint firstItem="Mhu-2F-4nq" firstAttribute="top" secondItem="UGf-qB-m1R" secondAttribute="top" constant="8" id="b4p-f4-T8h"/>
                                         <constraint firstAttribute="bottom" secondItem="7vB-v5-t8W" secondAttribute="bottom" constant="36.5" id="jf7-t9-FqQ"/>
