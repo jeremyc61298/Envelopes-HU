@@ -395,7 +395,7 @@
 		3F67F8A022612BD0002F05B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UPCXXU5UU2;
 				INFOPLIST_FILE = "Envelopes-HU/Info.plist";
@@ -413,7 +413,7 @@
 		3F67F8A122612BD0002F05B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UPCXXU5UU2;
 				INFOPLIST_FILE = "Envelopes-HU/Info.plist";
